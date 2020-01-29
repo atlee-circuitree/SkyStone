@@ -95,43 +95,75 @@ public class Skystone_Prod_Autonomous_VisionTarget extends BaseAutoOpMode {
 
         if(Skystones.size() > 0)
         {
-                //telemetry.addData("Skystone", Skystones.size());
-                //telemetry.update();
+                GetSkystoneLeftSide();
 
-                SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
+                if(LeftSide <= 145) {
 
-                feeder_motor.setPower(1);
+                    telemetry.addData("Skystone", "Left");
+                    telemetry.update();
 
-                rotate(10, 1);
-                StopAllDrive();
-                resetAngle();
+                    SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
 
-                SetDriveMode(Mode.STOP_RESET_ENCODER);
-                EncoderDrive(DriveDirection.BACKWARD, 1200);
+                    feeder_motor.setPower(1);
+
+                    rotate(10, 1);
+                    StopAllDrive();
+                    resetAngle();
+
+                    SetDriveMode(Mode.STOP_RESET_ENCODER);
+                    EncoderDrive(DriveDirection.BACKWARD, 2000);
+                }
+                else if((LeftSide <= 400) && (LeftSide >= 160)){
+
+                    telemetry.addData("Skystone", "Center");
+                    telemetry.update();
+
+                    SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
+
+                    feeder_motor.setPower(1);
+
+                    rotate(5, 1);
+                    StopAllDrive();
+                    resetAngle();
+
+                    SetDriveMode(Mode.STOP_RESET_ENCODER);
+                    EncoderDrive(DriveDirection.BACKWARD, 2000);
+
+                }
+                else{
+
+                    telemetry.addData("Skystone", "Right");
+                    telemetry.update();
+
+                    SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
+
+                    feeder_motor.setPower(1);
+
+                    rotate(-5, 1);
+                    StopAllDrive();
+                    resetAngle();
+
+                    SetDriveMode(Mode.STOP_RESET_ENCODER);
+                    EncoderDrive(DriveDirection.BACKWARD, 2000);
+
+                }
 
 
         }
-        else
-        {
-            rotate(15,1);
+        else{
+            telemetry.addData("Skystone", "Sorry, did't see anything. Going for middle block");
+            telemetry.update();
+
+            SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
+
+            feeder_motor.setPower(1);
+
+            rotate(5, 1);
             StopAllDrive();
             resetAngle();
 
-            Skystones = VisionTargetTfod();
-
-            if(Skystones.size() > 0)
-            {
-                telemetry.addData("Skystone", "Located");
-                telemetry.update();
-
-
-            }
-            else
-            {
-                rotate(-30, 1);
-                StopAllDrive();
-                resetAngle();
-            }
+            SetDriveMode(Mode.STOP_RESET_ENCODER);
+            EncoderDrive(DriveDirection.BACKWARD, 2000);
         }
 
 
