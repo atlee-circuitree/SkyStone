@@ -109,7 +109,7 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
     Deadline ledCycleDeadline;
     Deadline gamepadRateLimit;
 
-    DigitalChannel blockbutton; // Hardware Device Object
+  //  DigitalChannel blockbutton; // Hardware Device Object
 
 
     protected enum DisplayKind {
@@ -148,7 +148,7 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
         Top_Sensor_Front = hardwareMap.get(DigitalChannel.class, "Top_Sensor_Front");
         bottom_touch = hardwareMap.get(DigitalChannel.class, "bottom_touch");
         top_touch = hardwareMap.get(DigitalChannel.class, "top_touch");
-        blockbutton = hardwareMap.get(DigitalChannel.class, "blockbutton");
+       // blockbutton = hardwareMap.get(DigitalChannel.class, "blockbutton");
 
 
         lift_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -201,7 +201,7 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
         patternName = telemetry.addData("Pattern: ", pattern.toString());
 
         // set the digital channel to input.
-        blockbutton.setMode(DigitalChannel.Mode.INPUT);
+      //  blockbutton.setMode(DigitalChannel.Mode.INPUT);
 
         telemetry.addData("Single Cycle", "Incomplete");
         telemetry.update();
@@ -215,7 +215,7 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-            if (blockbutton.getState() == true) {
+         /*   if (blockbutton.getState() == true) {
                 telemetry.addData("Digital Touch", "Is Not Pressed");
                 //set color black
                 pattern = com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern.BLACK;
