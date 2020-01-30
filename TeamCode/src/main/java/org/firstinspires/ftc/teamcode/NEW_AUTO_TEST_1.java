@@ -69,16 +69,16 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
 
 
 //unfolds here
-       /* UnfoldRobot();
+        UnfoldRobot();
         resetAngle();
 
         feeder_motor.setPower(1);
         Block_Pickup.setPosition(.4f);
-        encoderDrive(DRIVE, -50, 3);
+        encoderDrive(DRIVE, -48, 3);
 
         encoderDrive(DRIVE, 26, 3);
-        
-        */
+
+
 
         while(Top_Sensor_Rear.getState()){
             top_motor.setPower(1);
@@ -86,20 +86,19 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
         }
         top_motor.setPower(0);
 
-        sleep(500);
-
-        /*while (bottom_touch.getState()){
+        while (bottom_touch.getState()){
             Lift(LiftDirection.UP);
+            sleep(10);
         }
         Lift(LiftDirection.STOP);
 
         encoderDrive(DRIVE, -3, 1);
 
         Block_Pickup.setPosition(1f);
-        sleep(1000);
+        sleep(1200);
 
         resetAngle();
-        rotate(79, .70);
+        rotate(80, .80);
 
         encoderDrive(DRIVE, 76, 5);
 
@@ -120,11 +119,7 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
         }
         top_motor.setPower(0);
 
-        front_left.setPower(-(1));
-        rear_left.setPower((0.2));
-        front_right.setPower((0.2));
-        rear_right.setPower(-(1));
-        sleep(1500);
+
 
 
         Lift(LiftDirection.UP);
@@ -135,7 +130,7 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
         sleep(500);
 
         resetAngle();
-        rotate(80, 1);
+        rotate(-80,1);
 
 
 
@@ -160,9 +155,6 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
         Lift(LiftDirection.STOP);
 
         encoderDrive(DRIVE, 80, 8);
-
-
-         */
 
 
         telemetry.addData("Path", "Complete");
