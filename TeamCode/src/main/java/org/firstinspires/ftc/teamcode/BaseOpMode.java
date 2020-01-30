@@ -77,6 +77,15 @@ public abstract class BaseOpMode extends LinearOpMode {
     public double globalAngle;
     int loop = 0;
 
+    static final double     COUNTS_PER_MOTOR_REV    = 2240 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 0.5 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     DRIVE           = 1;
+    static final double     STRAFE          = 1;
+    static final double     TURN_SPEED      = 1;
+
 
     public void GetHardware() {
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -436,18 +445,89 @@ public abstract class BaseOpMode extends LinearOpMode {
     }
 
 
+
+    public void encoderDrive(double speed,
+                             double distance,
+                             double timeoutS) {
+        int newLeftTarget;
+        int newRightTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newLeftTarget = front_left.getCurrentPosition() + (int)(distance * COUNTS_PER_INCH);
+            newRightTarget = front_right.getCurrentPosition() + (int)(distance * COUNTS_PER_INCH);
+            // newRightTarget = rear_right.getCurrentPosition() + (int)(distance * COUNTS_PER_INCH);
+            // newLeftTarget = rear_left.getCurrentPosition() + (int)(distance * COUNTS_PER_INCH);
+
+            front_left.setTargetPosition(newLeftTarget);
+            front_right.setTargetPosition(newRightTarget);
+            rear_left.setTargetPosition(newLeftTarget);
+            rear_right.setTargetPosition(newRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rear_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rear_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            front_left.setPower(Math.abs(speed));
+            front_right.setPower(Math.abs(speed));
+            rear_left.setPower(Math.abs(speed));
+            rear_right.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (  front_left.isBusy() && front_right.isBusy() && rear_left.isBusy() && rear_right.isBusy()  )  ) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d",
+                        front_left.getCurrentPosition(),
+                        front_right.getCurrentPosition(),
+                        rear_left.getCurrentPosition(),
+                        rear_right.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            front_left.setPower(0);
+            front_right.setPower(0);
+            rear_left.setPower(0);
+            rear_right.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rear_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rear_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
+        }
+    }
+
+
     public void Strafe(DriveDirection direction) {
         if (direction == DriveDirection.LEFT) {
-            front_left.setPower(-0.8);
-            front_right.setPower(0.7);
-            rear_left.setPower(0.8);
-            rear_right.setPower(-0.8);
+            front_left.setPower(-1);
+            front_right.setPower(1);
+            rear_left.setPower(1);
+            rear_right.setPower(-1);
         }
         if (direction == DriveDirection.RIGHT) {
             front_left.setPower(1);
-            front_right.setPower(-0.5);
-            rear_left.setPower(-0.5);
-            rear_right.setPower(0.5);
+            front_right.setPower(-1);
+            rear_left.setPower(-1);
+            rear_right.setPower(1);
         }
     }
 

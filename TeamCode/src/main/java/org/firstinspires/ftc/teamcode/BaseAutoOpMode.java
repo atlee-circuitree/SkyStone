@@ -170,25 +170,25 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         lift_right.setPower(0);
 
         feeder_motor.setPower(1);
-        sleep(500);
+        sleep(100);
         feeder_motor.setPower(0);
 
-        Feeder_Servo.setPosition(1);
-        sleep(900);
+        Release_Servo.setPosition(1);
+        sleep(1000);
 
-        top_motor.setPower(1);
-        craneSafetyTimer.reset();
-        while(Top_Sensor_Rear.getState() && craneSafetyTimer.milliseconds() < 2000)
-        {
-            top_motor.setPower(1);
-        }
-        top_motor.setPower(0);
+//        top_motor.setPower(1);
+//        craneSafetyTimer.reset();
+//        while(Top_Sensor_Rear.getState() && craneSafetyTimer.milliseconds() < 2000)
+//        {
+//            top_motor.setPower(1);
+//        }
+//        top_motor.setPower(0);
 
-        Block_Pickup.setPosition(0.4f);
+//        Block_Pickup.setPosition(0.4f);
+
         feeder_motor.setPower(-1);
-        sleep(3000);
+        sleep(2000);
         feeder_motor.setPower(0);
-
 
     }
 
