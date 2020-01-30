@@ -93,14 +93,10 @@ public class Skystone_Vision_TurnToward extends BaseAutoOpMode {
                 telemetry.addData("Object 0", stone.getLabel());
 
                 double angleToStone = stone.estimateAngleToObject(AngleUnit.DEGREES);
-<<<<<<< HEAD
-                if (Math.abs(angleToStone) < 5) {
-=======
-                telemetry.addData("Angle", angleToStone);
 
-                if( Math.abs(angleToStone) < 5)
-                {
->>>>>>> a28f47ba9c4df9967b120511102568830b082e3b
+
+                if (Math.abs(angleToStone) < 5) {
+                    telemetry.addData("Angle", angleToStone);
                     Drive(DriveDirection.BACKWARD);
                     sleep(1000);
                     StopAllDrive();
@@ -119,12 +115,10 @@ public class Skystone_Vision_TurnToward extends BaseAutoOpMode {
             } else {
                 telemetry.addData("Status", "Not detected");
                 telemetry.addData("Movements", movements);
-                if(movements <= 30)
-                {
+                if (movements <= 30) {
                     movements++;
                     EncoderDrive(DriveDirection.BACKWARD, 100);
                 }
-
 
 
                 telemetry.update();
