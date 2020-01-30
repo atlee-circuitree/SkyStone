@@ -78,6 +78,7 @@ public class Encoder_InchValue_Test extends BaseAutoOpMode {
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE           = 1;
+    static final double         STRAFE =1;
     static final double     TURN_SPEED              = 1;
 
     @Override
@@ -104,6 +105,7 @@ public class Encoder_InchValue_Test extends BaseAutoOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         encoderDrive(DRIVE ,  24,  5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+       // encoderStrafe(STRAFE, );
        // encoderDrive(TURN_SPEED,   12,  4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
        // encoderDrive(DRIVE_SPEED , -24,  3.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
@@ -189,4 +191,76 @@ public class Encoder_InchValue_Test extends BaseAutoOpMode {
             //  sleep(250);   // optional pause after each move
         }
     }
+
+        public void encoderStrafe(
+            double speed,
+            double distance,
+            double timeoutS) {
+                int frontLeftTarget;
+                int frontRightTarget;
+                int rearLeftTarget;
+                int rearRightTarget;
+
+            // Ensure that the opmode is still active
+            if (opModeIsActive()) {
+
+                // Determine new target position, and pass to motor controller
+                frontLeftTarget = front_left.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+                frontRightTarget = front_right.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+                rearLeftTarget = rear_left.getCurrentPosition() +  (int) (distance * COUNTS_PER_INCH);
+                rearRightTarget = rear_right.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+
+                front_left.setTargetPosition(frontLeftTarget);
+                front_right.setTargetPosition(frontRightTarget);
+                rear_left.setTargetPosition(rearLeftTarget);
+                rear_right.setTargetPosition(rearRightTarget);
+
+                // Turn On RUN_TO_POSITION
+                front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rear_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rear_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                // reset the timeout time and start motion.
+                runtime.reset();
+                front_left.setPower(Math.abs(speed));
+                front_right.setPower(Math.abs(speed));
+                rear_left.setPower(Math.abs(speed));
+                rear_right.setPower(Math.abs(speed));
+
+                // keep looping while we are still active, and there is time left, and both motors are running.
+                // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+                // its target position, the motion will stop.  This is "safer" in the event that the robot will
+                // always end the motion as soon as possible.
+                // However, if you require that BOTH motors have finished their moves before the robot continues
+                // onto the next step, use (isBusy() || isBusy()) in the loop test.
+                while (opModeIsActive() &&
+                        (runtime.seconds() < timeoutS) &&
+                        (front_left.isBusy() && front_right.isBusy() && rear_left.isBusy() && rear_right.isBusy())) {
+
+                    // Display it for the driver.
+                    telemetry.addData("Path1", "Running to %7d :%7d", frontLeftTarget, frontRightTarget, rearLeftTarget, rearRightTarget);
+                    telemetry.addData("Path2", "Running at %7d :%7d",
+                            front_left.getCurrentPosition(),
+                            front_right.getCurrentPosition(),
+                            rear_left.getCurrentPosition(),
+                            rear_right.getCurrentPosition());
+                    telemetry.update();
+                }
+
+                // Stop all motion;
+                front_left.setPower(0);
+                front_right.setPower(0);
+                rear_left.setPower(0);
+                rear_right.setPower(0);
+
+                // Turn off RUN_TO_POSITION
+                front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rear_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rear_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                //  sleep(250);   // optional pause after each move
+            }
+        }
 }

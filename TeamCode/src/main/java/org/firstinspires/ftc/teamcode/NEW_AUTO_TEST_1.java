@@ -29,7 +29,10 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.telephony.euicc.DownloadableSubscription;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 /**
@@ -51,6 +54,9 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        telemetry.addData("Status", "Resetting Encoders");    //
+        telemetry.update();
+
 
         //Assigns hardware devices names and values
 
@@ -63,13 +69,104 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
 
 
 //unfolds here
-        UnfoldRobot();
+       /* UnfoldRobot();
+        resetAngle();
+
+        feeder_motor.setPower(1);
+        Block_Pickup.setPosition(.4f);
+        encoderDrive(DRIVE, -50, 3);
+
+        encoderDrive(DRIVE, 26, 3);
+        
+        */
+
+        while(Top_Sensor_Rear.getState()){
+            top_motor.setPower(1);
+            sleep(10);
+        }
+        top_motor.setPower(0);
+
+        sleep(500);
+
+        /*while (bottom_touch.getState()){
+            Lift(LiftDirection.UP);
+        }
+        Lift(LiftDirection.STOP);
+
+        encoderDrive(DRIVE, -3, 1);
+
+        Block_Pickup.setPosition(1f);
+        sleep(1000);
+
+        resetAngle();
+        rotate(79, .70);
+
+        encoderDrive(DRIVE, 76, 5);
+
+        rotate(79, .70);
+
+        encoderDrive(DRIVE, 8, 2);
+
+        Clamp_Left.setPosition(0.8f);
+        Clamp_Right.setPosition(0f);
+        sleep(1000);
+
+        Lift(LiftDirection.DOWN);
+        sleep(500);
+        Lift(LiftDirection.STOP);
+
+        while(Top_Sensor_Front.getState()){
+            top_motor.setPower(-1);
+        }
+        top_motor.setPower(0);
+
+        front_left.setPower(-(1));
+        rear_left.setPower((0.2));
+        front_right.setPower((0.2));
+        rear_right.setPower(-(1));
+        sleep(1500);
+
+
+        Lift(LiftDirection.UP);
+        sleep(600);
+        Lift(LiftDirection.STOP);
+
+        Block_Pickup.setPosition(.4f);
+        sleep(500);
+
+        resetAngle();
+        rotate(80, 1);
 
 
 
+        Lift(LiftDirection.DOWN);
+        encoderDrive(DRIVE, 24, 2);
+        sleep(400);
+        Lift(LiftDirection.STOP);
 
 
+        Clamp_Left.setPosition(0f);
+        Clamp_Right.setPosition(1f);
+        sleep(1000);
 
+        while(Top_Sensor_Rear.getState()){
+            top_motor.setPower(1);
+        }
+        top_motor.setPower(0);
+
+        while (bottom_touch.getState()){
+            Lift(LiftDirection.UP);
+        }
+        Lift(LiftDirection.STOP);
+
+        encoderDrive(DRIVE, 80, 8);
+
+
+         */
+
+
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
 
     }
 }

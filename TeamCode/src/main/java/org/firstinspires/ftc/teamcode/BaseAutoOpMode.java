@@ -167,13 +167,18 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         lift_left.setPower(0);
         lift_right.setPower(0);
 
-        Release_Servo.setPosition(0.8);
-        //  sleep(1000);
-        //Release_Servo2.setPosition(1);
-        sleep(1000);
         feeder_motor.setPower(1);
-        sleep(500);
+        sleep(100);
         feeder_motor.setPower(0);
+
+        Release_Servo.setPosition(1);
+        sleep(1000);
+
+        feeder_motor.setPower(-1);
+        sleep(2000);
+        feeder_motor.setPower(0);
+
+
     }
 
     public void VisionTargetVuforia(int milliseconds) {
