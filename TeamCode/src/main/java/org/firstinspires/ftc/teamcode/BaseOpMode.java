@@ -172,8 +172,20 @@ public abstract class BaseOpMode extends LinearOpMode {
      *
      * @param degrees Degrees to turn, + is left - is right
      */
-    public void rotate(int degrees, double power) {
-        double leftPower, rightPower;
+    public void rotate(int degrees, double power)
+    {
+        curvedRotate(degrees, power, power);
+    }
+
+    /**
+     * Rotate Left or Right the number of degrees.  Does not support turning more than 180 degrees.
+     * By passing in different left and right values (e.g. .5 and 1), the robot should travel instead of turning in place
+     * @param degrees
+     * @param leftPower
+     * @param rightPower
+     */
+    public void curvedRotate(int degrees, double leftPower, double rightPower) {
+        //double leftPower, rightPower;
 
         // restart imu movement tracking.
         resetAngle();
@@ -182,12 +194,14 @@ public abstract class BaseOpMode extends LinearOpMode {
         // clockwise (right).
 
         if (degrees < 0) {   // turn right.
-            leftPower = power;
-            rightPower = -power;
+            leftPower = leftPower;
+            rightPower = -rightPower;
         } else if (degrees > 0) {   // turn left.
-            leftPower = -power;
-            rightPower = power;
+            leftPower = -leftPower;
+            rightPower = rightPower;
         } else return;
+
+
 
         // set power to rotate.
         front_left.setPower(leftPower);
