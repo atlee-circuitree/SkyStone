@@ -116,6 +116,11 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
     @Override
     public void GetHardware() {
         super.GetHardware();
+        front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rear_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rear_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
     }
 
@@ -150,18 +155,7 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
     }
     public void UnfoldRobot() {
 
-        front_left.setPower(.8);
-        front_right.setPower(.8);
-        rear_left.setPower(.8);
-        rear_right.setPower(.8);
-
-        sleep(100);
-
-        front_left.setPower(0);
-        front_right.setPower(0);
-        rear_left.setPower(0);
-        rear_right.setPower(0);
-
+        encoderDrive(DRIVE, -4, 1);
         lift_left.setPower(-1);
         lift_right.setPower(-1);
         sleep(400);
@@ -173,6 +167,8 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         sleep(100);
         feeder_motor.setPower(0);
 
+        Clamp_Left.setPosition(0.4);
+        Clamp_Right.setPosition(.5);
         Release_Servo.setPosition(1);
         sleep(1000);
 
