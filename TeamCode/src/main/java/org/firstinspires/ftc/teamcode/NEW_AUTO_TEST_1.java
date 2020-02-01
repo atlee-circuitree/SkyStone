@@ -111,7 +111,8 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
         //sleep(1000);
 
         resetAngle();
-        rotate(76, .70);
+        //rotate(76, .70);
+        rotate(85, 1);
 
         encoderDrive(DRIVE, 79, 5);
         encoderDrive(DRIVE, -3,2);
@@ -119,7 +120,8 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
         Block_Pickup.setPosition(1f);
         sleep(900);
 
-        rotate(78, .70);
+        //rotate(78, .70);
+        rotate(85, 1);
 
         Clamp_Left.setPosition(0.4);
         Clamp_Right.setPosition(.5);
@@ -150,14 +152,14 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
 
         //curvedRotate(-45, .5, 1);
 
-        encoderDrive(DRIVE, -20, 2);
+        encoderDrive(DRIVE, -40, 2);
 
         EncoderDrive(DriveDirection.STRAFE_LEFT, 5000);
         sleep(2000);
 
 
         resetAngle();
-        rotate(-70,1);
+        rotate(-90,1);
 
         Lift(LiftDirection.DOWN);
         //sleep(400);

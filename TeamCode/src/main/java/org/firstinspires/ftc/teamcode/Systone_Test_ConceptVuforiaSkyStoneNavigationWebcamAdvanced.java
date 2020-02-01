@@ -351,10 +351,11 @@ public class Systone_Test_ConceptVuforiaSkyStoneNavigationWebcamAdvanced extends
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
-                    targetVisible = true;
 
                     if(!trackable.getName().equals(stoneTarget.getName()))  //Do NOT update the current location based on a skystone - look for the next visible target, if available
                     {
+                        targetVisible = true;
+
                         // getUpdatedRobotLocation() will return null if no new information is available since
                         // the last time that call was made, or if the trackable is not currently visible.
                         OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
@@ -367,14 +368,15 @@ public class Systone_Test_ConceptVuforiaSkyStoneNavigationWebcamAdvanced extends
                         OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                         if (robotLocationTransform != null) {
                             lastStoneLocation = robotLocationTransform;
-                        }
-                        VectorF translation = lastStoneLocation.getTranslation();
-                        telemetry.addData("Stone Rel Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                            VectorF translation = lastStoneLocation.getTranslation();
+                            telemetry.addData("Stone Rel Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-                        // express the rotation of the robot in degrees.
-                        Orientation rotation = Orientation.getOrientation(lastStoneLocation, EXTRINSIC, XYZ, DEGREES);
-                        telemetry.addData("Stone Rel Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                            // express the rotation of the robot in degrees.
+                            Orientation rotation = Orientation.getOrientation(lastStoneLocation, EXTRINSIC, XYZ, DEGREES);
+                            telemetry.addData("Stone Rel Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                        }
+
                     }
                 }
             }
