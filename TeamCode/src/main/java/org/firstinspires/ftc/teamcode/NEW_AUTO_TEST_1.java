@@ -74,52 +74,71 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
 
         feeder_motor.setPower(1);
         Block_Pickup.setPosition(.4f);
-        encoderDrive(DRIVE, -48, 3);
+        encoderDrive(DRIVE, -42, 3);
 
-        encoderDrive(DRIVE, 26, 3);
+       // encoderDrive(DRIVE, 26, 3);
 
+        encoderDrive(DRIVE, 21, 3);
 
-
-        while(Top_Sensor_Rear.getState()){
-            top_motor.setPower(1);
-            sleep(10);
+        while(Top_Sensor_Rear.getState()||(bottom_touch.getState()))
+        {
+            if (Top_Sensor_Rear.getState()) {
+                top_motor.setPower(1);
+            } else {
+                top_motor.setPower(0);
+            }
+            if (bottom_touch.getState()) {
+                Lift(LiftDirection.UP);
+            } else {
+                Lift(LiftDirection.STOP);
+            }
         }
-        top_motor.setPower(0);
 
-        while (bottom_touch.getState()){
+        /*while (bottom_touch.getState()){
             Lift(LiftDirection.UP);
-            sleep(10);
+            //encoderDrive(DRIVE, -3, 1);
+
         }
         Lift(LiftDirection.STOP);
 
-        encoderDrive(DRIVE, -3, 1);
 
-        Block_Pickup.setPosition(1f);
-        sleep(1200);
+         */
+        //encoderDrive(DRIVE, -3, 1);
+
+//moved block pickup to after it gets to the other side of the field
+
+        //Block_Pickup.setPosition(1f);
+        //sleep(1000);
 
         resetAngle();
-        rotate(80, .80);
+        rotate(76, .70);
 
-        encoderDrive(DRIVE, 76, 5);
+        encoderDrive(DRIVE, 79, 5);
+        encoderDrive(DRIVE, -3,2);
 
-        rotate(79, .70);
+        Block_Pickup.setPosition(1f);
+        sleep(900);
 
-        encoderDrive(DRIVE, 8, 2);
+        rotate(78, .70);
 
-        Clamp_Left.setPosition(0.8f);
-        Clamp_Right.setPosition(0f);
-        sleep(1000);
+        Clamp_Left.setPosition(0.4);
+        Clamp_Right.setPosition(.5);
+        encoderDrive(DRIVE, 10, 2);
 
         Lift(LiftDirection.DOWN);
-        sleep(500);
+        Clamp_Left.setPosition(0.8f);
+        Clamp_Right.setPosition(0f);
+        sleep(650);
         Lift(LiftDirection.STOP);
+        sleep(500);
+
+        encoderDrive(DRIVE, 2, 1);
+
 
         while(Top_Sensor_Front.getState()){
             top_motor.setPower(-1);
         }
         top_motor.setPower(0);
-
-
 
 
         Lift(LiftDirection.UP);
@@ -129,16 +148,23 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
         Block_Pickup.setPosition(.4f);
         sleep(500);
 
+        //curvedRotate(-45, .5, 1);
+
+        encoderDrive(DRIVE, -20, 2);
+
+        EncoderDrive(DriveDirection.STRAFE_LEFT, 5000);
+        sleep(2000);
+
+
         resetAngle();
-        rotate(-80,1);
-
-
+        rotate(-70,1);
 
         Lift(LiftDirection.DOWN);
-        encoderDrive(DRIVE, 24, 2);
-        sleep(400);
-        Lift(LiftDirection.STOP);
+        //sleep(400);
 
+        encoderDrive(DRIVE, 24, 2);
+
+        Lift(LiftDirection.STOP);
 
         Clamp_Left.setPosition(0f);
         Clamp_Right.setPosition(1f);
@@ -154,7 +180,7 @@ public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
         }
         Lift(LiftDirection.STOP);
 
-        encoderDrive(DRIVE, 80, 8);
+       encoderDrive(DRIVE, 80, 8);
 
 
         telemetry.addData("Path", "Complete");
