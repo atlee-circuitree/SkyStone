@@ -131,6 +131,7 @@ public class Systone_Test_ConceptVuforiaSkyStoneNavigationWebcamAdvanced extends
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
+    private OpenGLMatrix lastStoneLocation = null;
     private VuforiaLocalizer vuforia = null;
 
     /**
@@ -145,6 +146,7 @@ public class Systone_Test_ConceptVuforiaSkyStoneNavigationWebcamAdvanced extends
     private float phoneZRotate    = 0;
 
     @Override public void runOpMode() {
+
 
         GetHardware();
 
@@ -232,9 +234,9 @@ public class Systone_Test_ConceptVuforiaSkyStoneNavigationWebcamAdvanced extends
         //Berg - let's try _not_ setting a location and see if we can _request_ a location from Vuforia
 
         // This can be used for generic target-centric approach algorithms
-        //stoneTarget.setLocation(OpenGLMatrix
-        //        .translation(0, 0, stoneZ)
-        //        .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
+        stoneTarget.setLocation(OpenGLMatrix
+                .translation(0, 0, stoneZ)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         //Set the position of the bridge support targets with relation to origin (center of field)
         blueFrontBridge.setLocation(OpenGLMatrix
@@ -349,33 +351,36 @@ public class Systone_Test_ConceptVuforiaSkyStoneNavigationWebcamAdvanced extends
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
-                    targetVisible = true;
 
-                    if(trackable.getName() != stoneTarget.getName())  //Do NOT update the current location based on a skystone - look for the next visible target, if available
+                    if(!trackable.getName().equals(stoneTarget.getName()))  //Do NOT update the current location based on a skystone - look for the next visible target, if available
                     {
+                        targetVisible = true;
+
                         // getUpdatedRobotLocation() will return null if no new information is available since
                         // the last time that call was made, or if the trackable is not currently visible.
                         OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                         if (robotLocationTransform != null) {
                             lastLocation = robotLocationTransform;
                         }
-                        break; //we've found a visible target - exit loop
+                    }
+                    else
+                    {
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            lastStoneLocation = robotLocationTransform;
+                            VectorF translation = lastStoneLocation.getTranslation();
+                            telemetry.addData("Stone Rel Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+                            // express the rotation of the robot in degrees.
+                            Orientation rotation = Orientation.getOrientation(lastStoneLocation, EXTRINSIC, XYZ, DEGREES);
+                            telemetry.addData("Stone Rel Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                        }
+
                     }
                 }
             }
-            //check trackables for stones
-            for (VuforiaTrackable trackable : allTrackables) {
-                if(trackable.getName() == stoneTarget.getName() && ((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()){
-                    skystones.add(trackable);
-                    OpenGLMatrix stoneLocation = trackable.getLocation();
-                    VectorF stoneTranslation = stoneLocation.getTranslation();
-                    telemetry.addData("Stone Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                            stoneTranslation.get(0) / mmPerInch, stoneTranslation.get(1) / mmPerInch, stoneTranslation.get(2) / mmPerInch);
-                    Orientation rotation = Orientation.getOrientation(stoneLocation, EXTRINSIC, XYZ, DEGREES);
-                    telemetry.addData("Stone Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-                }
-            }
-            telemetry.addData("Stones visible", skystones.size());
+
 
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
