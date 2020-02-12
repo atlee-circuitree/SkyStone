@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
+/* Copyright (c) 2019 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
@@ -27,15 +27,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -46,8 +42,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,18 +53,61 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 /**
- * This file contains basic code to run a 4 wheeled Mecanum wheel setup. The d-pad controls
- * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
+ * This 2019-2020 OpMode illustrates the basics of using the Vuforia localizer to determine
+ * positioning and orientation of robot on the SKYSTONE FTC field.
+ * The code is structured as a LinearOpMode
+ *
+ * When images are located, Vuforia is able to determine the position and orientation of the
+ * image relative to the camera.  This sample code then combines that information with a
+ * knowledge of where the target images are on the field, to determine the location of the camera.
+ *
+ * From the Audience perspective, the Red Alliance station is on the right and the
+ * Blue Alliance Station is on the left.
+ * Eight perimeter targets are distributed evenly around the four perimeter walls
+ * Four Bridge targets are located on the bridge uprights.
+ * Refer to the Field Setup manual for more specific location details
+ *
+ * A final calculation then uses the location of the camera on the robot to determine the
+ * robot's location and orientation on the field.
+ *
+ * @see VuforiaLocalizer
+ * @see VuforiaTrackableDefaultListener
+ * see  skystone/doc/tutorial/FTC_FieldCoordinateSystemDefinition.pdf
+ *
+ * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
+ *
+ * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
+ * is explained below.
  */
-@Disabled
-public abstract class BaseAutoOpMode extends BaseOpMode {
 
+@TeleOp(name="SKYSTONE Vuforia Nav Webcam", group ="Concept")
+@Disabled
+public class Skystone_Test_ConceptVuforiaSkyStoneNavigationWebcam extends LinearOpMode {
+
+    // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false;
+    private static final boolean PHONE_IS_PORTRAIT = false  ;
+
+    /*
+     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
+     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
+     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
+     * web site at https://developer.vuforia.com/license-manager.
+     *
+     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
+     * random data. As an example, here is a example of a fragment of a valid key:
+     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
+     * Once you've obtained a license key, copy the string from the Vuforia web site
+     * and paste it in to your code on the next line, between the double quotes.
+     */
     private static final String VUFORIA_KEY =
-            "AafZxv3/////AAABmbvkfliCqE7trSO0lgr69vZKeXPlRvKRDWyccoZNoXBWSLUlr3dPl6M1ytwGJ6MPNAEjNDNr/tooTJEMUjhLBnHnfL6spHtsMY+bAHl37Rolw2ermGIEyZnuhudFrQiVq1YOMgReWBJzBae4anpWccYEtWEKFhJi+edT4L2DCkYp4ysuU+Y/tEucxLuKnW7G3m+qrcESQ5PV2rNuM33n4YjdWFpe2OULNZA9S2sEtZCS9D50QKO6kZ3dVg2N0AKyzMIi7eSng/XFVu04Ap8L9pySa6qYojQjN0HVNw6l7SroTKv8TxLW3gYt+bvlaOijepSUFvSv41VLtkv+PtKYF7Jt/AN8D4oFV0iVvpOmiijO";
-    private static final float mmPerInch = 25.4f;
-    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+            " --- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+
+    // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
+    // We will define some constants and conversions here
+    private static final float mmPerInch        = 25.4f;
+    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -84,136 +121,28 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
 
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField = 36 * mmPerInch;
+    private static final float quadField  = 36 * mmPerInch;
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
+
+    /**
+     * This is the webcam we are to use. As with other hardware devices such as motors and
+     * servos, this device is identified using the robot configuration tool in the FTC application.
+     */
     WebcamName webcamName = null;
 
     private boolean targetVisible = false;
-    private float phoneXRotate = 0;
-    private float phoneYRotate = 0;
-    private float phoneZRotate = 0;
+    private float phoneXRotate    = 0;
+    private float phoneYRotate    = 0;
+    private float phoneZRotate    = 0;
 
-    String positionSkystone = "";
-    boolean Skystone_Is_Left = false;
-    boolean Skystone_Is_Right = false;
-    boolean Skystone_Is_Center = false;
-    boolean Skystone_Locked = false;
-
-    private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
-    private static final String LABEL_FIRST_ELEMENT = "Stone";
-    private static final String LABEL_SECOND_ELEMENT = "Skystone";
-
-    public TFObjectDetector tfod;
-
-    float LeftSide;
-
-    private ElapsedTime craneSafetyTimer = new ElapsedTime();
-
-    boolean SkystoneLocated = false;
-
-
-    @Override
-    public void GetHardware() {
-        super.GetHardware();
-        front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rear_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rear_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+    @Override public void runOpMode() {
+        /*
+         * Retrieve the camera we are to use.
+         */
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-    }
-
-    public void UnfoldRobotBackwards() {
-
-        front_left.setPower(-.8);
-        front_right.setPower(-.8);
-        rear_left.setPower(-.8);
-        rear_right.setPower(-.8);
-
-        sleep(100);
-
-        front_left.setPower(0);
-        front_right.setPower(0);
-        rear_left.setPower(0);
-        rear_right.setPower(0);
-
-        lift_left.setPower(1);
-        lift_right.setPower(-1);
-        sleep(400);
-
-        lift_left.setPower(0);
-        lift_right.setPower(0);
-
-        Release_Servo.setPosition(1);
-        //Release_Servo2.setPosition(1);
-        //  sleep(1000);
-
-        sleep(1000);
-        feeder_motor.setPower(-1);
-        sleep(500);
-        feeder_motor.setPower(0);
-    }
-    public void UnfoldRobotNoMovement() {
-
-        lift_left.setPower(1);
-        lift_right.setPower(-1);
-        sleep(400);
-
-        lift_left.setPower(0);
-        lift_right.setPower(0);
-
-        Release_Servo.setPosition(1);
-        //Release_Servo2.setPosition(1);
-        Block_Pickup.setPosition(0.4f);
-        sleep(1000);
-
-        //sleep(1000);
-        //feeder_motor.setPower(-1);
-        //sleep(500);
-        //feeder_motor.setPower(0);
-    }
-    public void UnfoldRobot() {
-
-        //encoderDrive(DRIVE, 4, 1);
-        lift_left.setPower(1);
-        lift_right.setPower(-1);
-        sleep(400);
-
-        lift_left.setPower(0);
-        lift_right.setPower(0);
-
-        feeder_motor.setPower(1);
-        sleep(100);
-        feeder_motor.setPower(0);
-
-        Clamp_Left.setPosition(0.4);
-        Clamp_Right.setPosition(.5);
-        Release_Servo.setPosition(1);
-        //Release_Servo2.setPosition(1);
-
-        sleep(1000);
-
-//        top_motor.setPower(1);
-//        craneSafetyTimer.reset();
-//        while(Top_Sensor_Rear.getState() && craneSafetyTimer.milliseconds() < 2000)
-//        {
-//            top_motor.setPower(1);
-//        }
-//        top_motor.setPower(0);
-
-//        Block_Pickup.setPosition(0.4f);
-
-        feeder_motor.setPower(-1);
-        sleep(2000);
-        feeder_motor.setPower(0);
-
-    }
-
-    public void VisionTargetVuforia(int safetyTimer) {
-
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -233,8 +162,7 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         parameters.cameraName = webcamName;
 
         //  Instantiate the Vuforia engine
-        if(vuforia == null)
-            vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
@@ -324,7 +252,7 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
 
         front1.setLocation(OpenGLMatrix
                 .translation(-halfField, -quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
 
         front2.setLocation(OpenGLMatrix
                 .translation(-halfField, quadField, mmTargetHeight)
@@ -340,7 +268,7 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
 
         rear1.setLocation(OpenGLMatrix
                 .translation(halfField, quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
 
         rear2.setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
@@ -369,14 +297,14 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90;
+            phoneXRotate = 90 ;
         }
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -393,46 +321,31 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
 
-        //waitForStart();
+        // waitForStart();
 
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
         // Tap the preview window to receive a fresh image.
 
-
-        int loop = 0;
         targetsSkyStone.activate();
-        //while (!isStopRequested()) {
-        while ((!SkystoneLocated) && (loop <= safetyTimer) && (!isStopRequested())) {
-
-            telemetry.addData("Loop", "Vision Targeting...");
-            telemetry.addData("safetyTimer", loop);
-            telemetry.update();
+        while (!isStopRequested()) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
 
-                    if(trackable.getName().equals("Stone Target")) {
-                        SkystoneLocated = true;
-                        telemetry.addData("Skystone", "Located");
-                        telemetry.update();
-
-
-                        // getUpdatedRobotLocation() will return null if no new information is available since
-                        // the last time that call was made, or if the trackable is not currently visible.
-                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                        if (robotLocationTransform != null) {
-                            lastLocation = robotLocationTransform;
-                        }
-                        break;
+                    // getUpdatedRobotLocation() will return null if no new information is available since
+                    // the last time that call was made, or if the trackable is not currently visible.
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                    if (robotLocationTransform != null) {
+                        lastLocation = robotLocationTransform;
                     }
+                    break;
                 }
             }
-
 
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
@@ -444,155 +357,14 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-
-                /*
-                double yPosition = translation.get(1);
-                if (yPosition < -3 && Skystone_Locked == false) {
-                    positionSkystone = "Left";
-                    Skystone_Is_Left = true;
-                    Skystone_Locked = true;
-                    telemetry.addData("Skystone Location", "Left");
-                    telemetry.update();
-
-                } else if (yPosition > 3 && Skystone_Locked == false) {
-                    positionSkystone = "Right";
-                    Skystone_Is_Right = true;
-                    Skystone_Locked = true;
-                    telemetry.addData("Skystone Location", "Right");
-                    telemetry.update();
-                } else {
-                    positionSkystone = "Center";
-                    Skystone_Is_Center = true;
-                    Skystone_Locked = true;
-                    telemetry.addData("Skystone Location", "Center");
-                    telemetry.update();
-                }
-            } else {
-                telemetry.addData("Skystone Location", "N/A");
-                telemetry.update();
-                Skystone_Locked = false;
-                Skystone_Is_Center = false;
-                Skystone_Is_Right = false;
-                Skystone_Is_Left = false;
-            } */
-
-
-            // Disable Tracking when we are done;
-            //targetsSkyStone.deactivate();
-
-
+            }
+            else {
+                telemetry.addData("Visible Target", "none");
+            }
+            telemetry.update();
         }
-            sleep(1);
-            loop++;
 
-    }
+        // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
     }
-
-    public void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.7;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
-    }
-
-    public void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = webcamName;
-
-        //  Instantiate the Vuforia engine
-        if(vuforia == null)
-            vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-
-
-    }
-
-    public void InitVision() {
-        // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first.
-        initVuforia();
-
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
-        if (tfod != null) {
-            tfod.activate();
-        }
-
-    }
-
-    public List<Recognition> VisionTargetTfod() {
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        List<Recognition> rSkystonesOnly = new ArrayList<Recognition>();
-        int i = 0;
-        if (updatedRecognitions != null) {
-            for (Recognition recognition : updatedRecognitions) {
-
-                i++;
-                telemetry.addData("Object" + (i), recognition.getLabel());
-                telemetry.addData("ObjectMatch" + (i), recognition.getLabel() == LABEL_SECOND_ELEMENT);
-
-
-                if (recognition.getLabel() == LABEL_SECOND_ELEMENT) {
-
-                    rSkystonesOnly.add(recognition);
-
-                }
-
-            }
-        }
-        return (rSkystonesOnly);
-
-    }
-
-    public float GetSkystoneLeftSide(){
-        List<Recognition> Skystones = VisionTargetTfod();
-
-        if (Skystones != null) {
-            for(Recognition recognition : Skystones) {
-                LeftSide = recognition.getLeft();
-            }
-        }
-
-        return(LeftSide);
-    }
-    public void PrepareForBridge(){
-
-        while(Top_Sensor_Rear.getState()){
-            feeder_motor.setPower(0.5);
-        }
-        while(bottom_touch.getState()){
-            Lift(LiftDirection.DOWN);
-        }
-
-    }
-    public void ResetEncoder(){
-        SetDriveMode(Mode.STOP_RESET_ENCODER);
-        SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
-    }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -62,7 +62,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     public DcMotor top_motor = null;
     public Servo Clamp_Left = null;
     public Servo Clamp_Right = null;
-    public Servo Feeder_Servo = null;
+  //  public Servo Feeder_Servo = null;
     public Servo Block_Pickup = null;
     public Servo Capstone = null;
     public Servo Release_Servo = null;
@@ -101,7 +101,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         top_motor = hardwareMap.get(DcMotor.class, "top_motor");
         Clamp_Left = hardwareMap.get(Servo.class, "Clamp_Left");
         Clamp_Right = hardwareMap.get(Servo.class, "Clamp_Right");
-        Feeder_Servo = hardwareMap.get(Servo.class, "Feeder_Servo");
+       // Feeder_Servo = hardwareMap.get(Servo.class, "Feeder_Servo");
         Block_Pickup = hardwareMap.get(Servo.class, "Block_Pickup");
         Capstone = hardwareMap.get(Servo.class, "Capstone");
         Release_Servo = hardwareMap.get(Servo.class, "Release_Servo");
@@ -215,10 +215,40 @@ public abstract class BaseOpMode extends LinearOpMode {
             while (opModeIsActive() && getAngle() == 0) {
             }
 
-            while (opModeIsActive() && getAngle() > degrees) {
+            while (opModeIsActive() && getAngle() >= degrees) {
+                telemetry.addData("Angle", getAngle());
+                telemetry.update();
+                if(getAngle() <= (degrees + 20)){
+
+                    telemetry.addData("RotateRight", "SlowingDown");
+                    telemetry.update();
+                    front_left.setPower(0.2);
+                    rear_left.setPower(0.2);
+                    front_right.setPower(-0.2);
+                    rear_right.setPower(-0.2);
+                }
+
+
             }
         } else    // left turn.
-            while (opModeIsActive() && getAngle() < degrees) {
+            while (opModeIsActive() && getAngle() <= degrees) {
+                telemetry.addData("Angle", getAngle());
+                telemetry.update();
+                if(getAngle() >= (degrees - 20)){
+                    //double offset = (degrees - getAngle());
+//                    front_left.setPower( Math.pow(leftPower * (offset/(degrees * 0.1)), 2 ));
+//                    rear_left.setPower( Math.pow(leftPower * (offset/(degrees * 0.1)), 2 ));
+//                    front_right.setPower( Math.pow(rightPower * (offset/(degrees * 0.1)), 2 ));
+//                    rear_right.setPower( Math.pow(rightPower * (offset/(degrees * 0.1)), 2 ));
+
+                    telemetry.addData("RotateLeft", "SlowingDown");
+                    telemetry.addData("Angle", getAngle());
+                    telemetry.update();
+                    front_left.setPower(-0.2);
+                    rear_left.setPower(-0.2);
+                    front_right.setPower(0.2);
+                    rear_right.setPower(0.2);
+                }
             }
 
         // turn the motors off.
@@ -228,7 +258,8 @@ public abstract class BaseOpMode extends LinearOpMode {
         rear_right.setPower(0);
 
         // wait for rotation to stop.
-        sleep(1000);
+        //simon u DONT NEED 1000 ms sleep
+        //sleep(1000);
 
         // reset angle tracking on new heading.
         resetAngle();
@@ -267,6 +298,19 @@ public abstract class BaseOpMode extends LinearOpMode {
         return globalAngle;
     }
 
+    public double getHeading(){
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC,
+                AxesOrder.ZYX, AngleUnit.DEGREES);
+        double heading = angles.firstAngle;
+        if(heading < -180) {
+            heading = heading + 360;
+        }
+        else if(heading > 180){
+            heading = heading - 360;
+        }
+        //heading = heading - reset_angle;
+        return heading;
+    }
 
     public enum DriveDirection {
         FORWARD,
@@ -275,7 +319,8 @@ public abstract class BaseOpMode extends LinearOpMode {
         RIGHT,
         STOP,
         STRAFE_RIGHT,
-        STRAFE_LEFT
+        STRAFE_LEFT,
+        BACK_LEFT
     }
 
 
@@ -455,6 +500,21 @@ public abstract class BaseOpMode extends LinearOpMode {
 
         }
 
+        if (direction == DriveDirection.BACK_LEFT) {
+            SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
+
+            while(front_left.getCurrentPosition() > -EncoderValue) {
+                front_left.setPower(-1);
+                front_right.setPower(.25);
+                rear_left.setPower(.25);
+                rear_right.setPower(-1);
+                sleep(1);
+
+                telemetry.addData( "Encoder", front_left.getCurrentPosition());
+                telemetry.update();
+            }
+        }
+
 
     }
 
@@ -553,11 +613,11 @@ public abstract class BaseOpMode extends LinearOpMode {
         }
         if (direction == LiftDirection.UP) {
             lift_left.setPower(1);
-            lift_right.setPower(1);
+            lift_right.setPower(-1);
         }
         if (direction == LiftDirection.DOWN) {
             lift_left.setPower(-1);
-            lift_right.setPower(-1);
+            lift_right.setPower(1);
         }
 
     }

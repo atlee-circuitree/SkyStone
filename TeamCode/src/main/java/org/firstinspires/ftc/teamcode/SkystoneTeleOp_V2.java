@@ -29,10 +29,10 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -48,9 +48,8 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
  * ...Does anybody even read these things? I mean like, this hasn't been updated since I started coding...
  */
 
-@TeleOp(name = "TeleOp", group = "Linear Opmode")
-@Disabled
-public class SkystoneTeleOp_V1 extends LinearOpMode {
+@TeleOp(name = "TeleOpV2", group = "Linear Opmode")
+public class SkystoneTeleOp_V2 extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -65,7 +64,7 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
     private DcMotor top_motor = null;
     private Servo Clamp_Left = null;
     private Servo Clamp_Right = null;
-    private Servo Feeder_Servo = null;
+    //private Servo Feeder_Servo = null;
     private Servo Block_Pickup = null;
     private Servo End_Left = null;
     private Servo End_Right = null;
@@ -103,7 +102,7 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
      */
     private final static int GAMEPAD_LOCKOUT = 500;
 
-        // DigitalChannel blockbutton; // Hardware Device Object
+    // DigitalChannel blockbutton; // Hardware Device Object
 
 
     protected enum DisplayKind {
@@ -130,7 +129,7 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
         top_motor = hardwareMap.get(DcMotor.class, "top_motor");
         Clamp_Left = hardwareMap.get(Servo.class, "Clamp_Left");
         Clamp_Right = hardwareMap.get(Servo.class, "Clamp_Right");
-        Feeder_Servo = hardwareMap.get(Servo.class, "Feeder_Servo");
+       // Feeder_Servo = hardwareMap.get(Servo.class, "Feeder_Servo");
         Block_Pickup = hardwareMap.get(Servo.class, "Block_Pickup");
         Capstone = hardwareMap.get(Servo.class, "Capstone");
         End_Left = hardwareMap.get(Servo.class, "End_Left");
@@ -178,7 +177,7 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
         rear_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.REVERSE);
         rear_right.setDirection(DcMotor.Direction.FORWARD);
-        lift_left.setDirection(DcMotor.Direction.REVERSE);
+        lift_left.setDirection(DcMotor.Direction.FORWARD);
         lift_right.setDirection(DcMotor.Direction.REVERSE);
         feeder_motor.setDirection(DcMotor.Direction.REVERSE);
         top_motor.setDirection(DcMotor.Direction.FORWARD);
@@ -200,26 +199,26 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-          /*  if (blockbutton.getState() == true) {
-                telemetry.addData("Digital Touch", "Is Not Pressed");
-                //set color black
-                pattern = com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern.BLACK;
-            } else {
-                telemetry.addData("Digital Touch", "Is Pressed");
-                ///SET COLOR ORANGE
-                pattern = com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern.ORANGE;
-            }
-            blinkinLedDriver.setPattern(pattern);
-            //telemetry.update();
-           */
+         /*  if (blockbutton.getState() == true) {
+               telemetry.addData("Digital Touch", "Is Not Pressed");
+               //set color black
+               pattern = com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern.BLACK;
+           } else {
+               telemetry.addData("Digital Touch", "Is Pressed");
+               ///SET COLOR ORANGE
+               pattern = com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern.ORANGE;
+           }
+           blinkinLedDriver.setPattern(pattern);
+           //telemetry.update();
+          */
 
-        /*
-        if (displayKind == DisplayKind.AUTO) {
-            doAutoDisplay();
-        } else {
-            // * MANUAL mode: Nothing to do, setting the pattern as a result of a gamepad event.
-        }
-        */
+       /*
+       if (displayKind == DisplayKind.AUTO) {
+           doAutoDisplay();
+       } else {
+           // * MANUAL mode: Nothing to do, setting the pattern as a result of a gamepad event.
+       }
+       */
 
 
             //Player 1
@@ -294,21 +293,21 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
     }
 
 
-   /* public void UpdateFeederServo() {
-        //feeder Servo Open Close
-        if (gamepad1.right_trigger > 0 && feederServoPosition < 1) {
-            telemetry.addData("FeederServo", "Feeder Servo Close");
-            telemetry.addData("Angle", feederServoPosition);
-            Feeder_Servo.setPosition(feederServoPosition);
-            feederServoPosition = feederServoPosition + 0.1f;
-        } else if (gamepad1.right_bumper && feederServoPosition > 0) {
-            telemetry.addData("FeederServo", "Feeder Servo Open");
-            telemetry.addData("Angle", feederServoPosition);
-            Feeder_Servo.setPosition(feederServoPosition);
-            feederServoPosition = feederServoPosition - 0.1f;
-        }
-    }
-    */
+  /* public void UpdateFeederServo() {
+       //feeder Servo Open Close
+       if (gamepad1.right_trigger > 0 && feederServoPosition < 1) {
+           telemetry.addData("FeederServo", "Feeder Servo Close");
+           telemetry.addData("Angle", feederServoPosition);
+           Feeder_Servo.setPosition(feederServoPosition);
+           feederServoPosition = feederServoPosition + 0.1f;
+       } else if (gamepad1.right_bumper && feederServoPosition > 0) {
+           telemetry.addData("FeederServo", "Feeder Servo Open");
+           telemetry.addData("Angle", feederServoPosition);
+           Feeder_Servo.setPosition(feederServoPosition);
+           feederServoPosition = feederServoPosition - 0.1f;
+       }
+   }
+   */
 
     public void UpdateLift() {
         //Player 2
@@ -380,126 +379,61 @@ public class SkystoneTeleOp_V1 extends LinearOpMode {
         telemetry.addData("front_right Encoder Position", front_right.getCurrentPosition());
         telemetry.addData("rear_right Encoder Position", rear_right.getCurrentPosition());
 
-        double leftPower;
-        double rightPower;
+        double frontLeftPower;
+        double frontRightPower;
+        double rearLeftPower;
+        double rearRightPower;
+
+        double pi = 3.1415926;
+
+
         double drive = -gamepad1.left_stick_y;
-        double turn = gamepad1.left_stick_x;
-        leftPower = Range.clip(drive + turn, -1.0, 1.0);
-        rightPower = Range.clip(drive - turn, -1.0, 1.0);
+        double strafe = gamepad1.left_stick_x * 1.5;
+        double turn = gamepad1.right_stick_x;
 
-        if (leftPower != 0 || rightPower != 0) {
-            front_left.setPower(leftPower);
-            rear_left.setPower(leftPower);
-            front_right.setPower(rightPower);
-            rear_right.setPower(rightPower);
-        } else if (gamepad1.right_stick_x < -0.4 && gamepad1.right_stick_y < 0) {
-            telemetry.addData("DriveTrain", "Up and Left");
-            front_left.setPower(-(0.25 + front_left_modifier));
-            rear_left.setPower((1 + rear_left_modifier));
-            front_right.setPower((1 + front_right_modifier));
-            rear_right.setPower(-(0.25 + rear_right_modifier));
-           /*
-            front_left.setPower((1 + front_left_modifier));
-            rear_left.setPower(-(1 + rear_left_modifier));
-            front_right.setPower(-(1 + front_right_modifier));
-            rear_right.setPower((1 + rear_right_modifier));
-            */
+       /*
+       double gyroDegrees = getAngle();
 
-        } else if (gamepad1.right_stick_x > 0.4 && gamepad1.right_stick_y < 0) {
-            telemetry.addData("DriveTrain", "Up and Right");
+       double gyroRadians = gyroDegrees * pi/180;
+       double forwardTemp = drive * Math.cos(gyroRadians) + strafe * Math.sin(gyroRadians);
+       strafe = drive * Math.sin(gyroRadians) + strafe * Math.cos(gyroRadians);
+       drive = forwardTemp;
+*/
 
-            front_left.setPower((1 + front_left_modifier));
-            rear_left.setPower(-(.25 + rear_left_modifier));
-            front_right.setPower(-(.25 + front_right_modifier));
-            rear_right.setPower((1 + rear_right_modifier));
 
-            /*front_left.setPower(-(1 + front_left_modifier));
-            rear_left.setPower((1 + rear_left_modifier));
-            front_right.setPower((1 + front_right_modifier));
-            rear_right.setPower(-(1 + rear_right_modifier));
-             */
+        frontLeftPower = (drive + strafe + turn);
+        rearLeftPower = (drive - strafe + turn);
+        frontRightPower = (drive - strafe - turn);
+        rearRightPower = (drive + strafe - turn);
 
 
 
+        if (Math.abs(frontLeftPower) > 1 || Math.abs(rearLeftPower) > 1 || Math.abs(frontRightPower) > 1 || Math.abs(rearRightPower) >1) {
 
-        } else if (gamepad1.right_stick_x < -0.4 && gamepad1.right_stick_y > 0) {
-            telemetry.addData("DriveTrain", "Down and Left");
+            double max = 0;
+            max = Math.max(Math.abs(frontLeftPower),Math.abs(rearLeftPower));
+            max = Math.max(Math.abs(frontRightPower), max);
+            max = Math.max(Math.abs(rearRightPower), max);
 
-            front_left.setPower(-(1 + front_left_modifier));
-            rear_left.setPower((0.2 + rear_left_modifier));
-            front_right.setPower((0.2 + front_right_modifier));
-            rear_right.setPower(-(1 + rear_right_modifier));
+            frontLeftPower /= max;
+            rearLeftPower /= max;
+            frontRightPower /= max;
+            rearRightPower /= max;
 
-                /*front_left.setPower((1 + front_left_modifier));
-            rear_left.setPower(-(1 + rear_left_modifier));
-            front_right.setPower(-(1 + front_right_modifier));
-            rear_right.setPower((1 + rear_right_modifier));
-             */
 
-        } else if (gamepad1.right_stick_x > 0.4 && gamepad1.right_stick_y > 0) {
-            telemetry.addData("DriveTrain", "Down and Right");
 
-            front_left.setPower((0.25 + front_left_modifier));
-            rear_left.setPower(-(1 + rear_left_modifier));
-            front_right.setPower(-(1 + front_right_modifier));
-            rear_right.setPower((0.25 + rear_right_modifier));
-
-            /*front_left.setPower(-(1 + front_left_modifier));
-            rear_left.setPower((1 + rear_left_modifier));
-            front_right.setPower((1 + front_right_modifier));
-            rear_right.setPower(-(1 + rear_right_modifier));
-             */
-
-        } else if (gamepad1.right_stick_y > 0) {
-            telemetry.addData("DriveTrain", "Moving Backwards");
-            front_left.setPower(-(1 + front_left_modifier));
-            rear_left.setPower(-(1 + rear_left_modifier));
-            front_right.setPower(-(1 + front_right_modifier));
-            rear_right.setPower(-(1 + rear_right_modifier));
-
-        } else if (gamepad1.right_stick_y < 0) {
-            telemetry.addData("DriveTrain", "Moving Forward");
-
-            front_left.setPower((1 + front_left_modifier));
-            rear_left.setPower((1 + rear_left_modifier));
-            front_right.setPower((1 + front_right_modifier));
-            rear_right.setPower((1 + rear_right_modifier));
-
-        } else if (gamepad1.right_stick_x < 0) {
-            telemetry.addData("DriveTrain", "Strafing Right");
-            front_left.setPower(-(1 + front_left_modifier));
-            rear_left.setPower((1 + rear_left_modifier));
-            front_right.setPower((1 + front_right_modifier));
-            rear_right.setPower(-(1 + rear_right_modifier));
-
-        } else if (gamepad1.right_stick_x > 0) {
-            telemetry.addData("DriveTrain", "Strafing Left");
-            front_left.setPower((1 + front_left_modifier));
-            rear_left.setPower(-(1 + rear_left_modifier));
-            front_right.setPower(-(1 + front_right_modifier));
-            rear_right.setPower((1 + rear_right_modifier));
-
-        } else if (gamepad1.dpad_left) {
-            telemetry.addData("DriveTrain", "Strafing Right");
-            front_left.setPower(-(1 + front_left_modifier));
-            rear_left.setPower((1 + rear_left_modifier));
-            front_right.setPower((1 + front_right_modifier));
-            rear_right.setPower(-(1 + rear_right_modifier));
-
-        } else if (gamepad1.dpad_right) {
-            telemetry.addData("DriveTrain", "Strafing Left");
-            front_left.setPower((1 + front_left_modifier));
-            rear_left.setPower(-(1 + rear_left_modifier));
-            front_right.setPower(-(1 + front_right_modifier));
-            rear_right.setPower((1 + rear_right_modifier));
-
-        } else {
-            telemetry.addData("DriveTrain", "Not moving");
-            front_left.setPower(0);
-            rear_left.setPower(0);
-            front_right.setPower(0);
-            rear_right.setPower(0);
         }
+
+
+        front_left.setPower(frontLeftPower);
+        rear_left.setPower(rearLeftPower);
+        front_right.setPower(frontRightPower);
+        rear_right.setPower(rearRightPower);
+
+
+
+
+
     }
 
     public void UpdateBlockPickUp() {

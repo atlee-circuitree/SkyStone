@@ -67,106 +67,74 @@ import java.util.List;
  * is explained below.
  */
 
-@Autonomous(name="Vision_Targeting_Autonomous", group ="Concept")
+@Autonomous(name="Vuforia_Targeting_Autonomous", group ="Concept")
 //@Disabled
-public class Skystone_Prod_Autonomous_VisionTarget extends BaseAutoOpMode {
+public class Skystone_Autonomous_VisionTargetVuforia extends BaseAutoOpMode {
 
+    boolean SkipTheRest1 = false;
+    boolean SkipTheRest2 = false;
 
 
     @Override
     public void runOpMode() {
 
-       //GetIMU();
+        //GetIMU();
         GetHardware();
-        InitVision();
+        initVuforia();
         resetAngle();
 
         waitForStart();
 
 
-        UnfoldRobotBackwards();
+        //UnfoldRobotBackwards();
 
-        encoderDrive(1, -12, 2);
+        encoderDrive(1, -20, 2);
 
-        List<Recognition> Skystones = VisionTargetTfod();
-        telemetry.addData("Loop", "Out of vision targeting");
-        telemetry.addData("Skystones", Skystones.size());
-        telemetry.update();
+        VisionTargetVuforia(200);
 
-        if(Skystones.size() > 0)
-        {
-                GetSkystoneLeftSide();
-
-                if(LeftSide <= 145) {
-
-                    telemetry.addData("Skystone", "Left");
-                    telemetry.update();
-
-                    SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
-
-                    feeder_motor.setPower(1);
-
-                    rotate(10, 1);
-                    StopAllDrive();
-                    resetAngle();
-
-                    SetDriveMode(Mode.STOP_RESET_ENCODER);
-                    EncoderDrive(DriveDirection.BACKWARD, 2000);
-                }
-                else if((LeftSide <= 400) && (LeftSide >= 160)){
-
-                    telemetry.addData("Skystone", "Center");
-                    telemetry.update();
-
-                    SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
-
-                    feeder_motor.setPower(1);
-
-                    rotate(5, 1);
-                    StopAllDrive();
-                    resetAngle();
-
-                    SetDriveMode(Mode.STOP_RESET_ENCODER);
-                    EncoderDrive(DriveDirection.BACKWARD, 2000);
-
-                }
-                else{
-
-                    telemetry.addData("Skystone", "Right");
-                    telemetry.update();
-
-                    SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
-
-                    feeder_motor.setPower(1);
-
-                    rotate(-5, 1);
-                    StopAllDrive();
-                    resetAngle();
-
-                    SetDriveMode(Mode.STOP_RESET_ENCODER);
-                    EncoderDrive(DriveDirection.BACKWARD, 2000);
-
-                }
-
-
-        }
-        else{
-            telemetry.addData("Skystone", "Sorry, did't see anything. Going for middle block");
-            telemetry.update();
-
-            SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
+        if (SkystoneLocated) {
 
             feeder_motor.setPower(1);
+            sleep(100);
+            encoderDrive(1, -20, 3);
+            encoderDrive(1, 30, 3.5);
+            SkipTheRest1 = true;
 
-            rotate(5, 1);
-            StopAllDrive();
-            resetAngle();
-
-            SetDriveMode(Mode.STOP_RESET_ENCODER);
-            EncoderDrive(DriveDirection.BACKWARD, 2000);
         }
+        if (!SkipTheRest1){
+            sleep(10);
+            ResetEncoder();
+            telemetry.addLine("Strafing");
+            telemetry.update();
+            EncoderDrive(DriveDirection.STRAFE_RIGHT, 950);
+
+            VisionTargetVuforia(200);
+
+            if (SkystoneLocated) {
+
+                feeder_motor.setPower(1);
+                sleep(100);
+                encoderDrive(1, -20, 3);
+                encoderDrive(1, 30, 3.5);
+                ResetEncoder();
+                EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
+                SkipTheRest2 = true;
+
+            }
+            if(!SkipTheRest2) {
+                ResetEncoder();
+                EncoderDrive(DriveDirection.STRAFE_RIGHT, 950);
+                ResetEncoder();
+                feeder_motor.setPower(1);
+                sleep(100);
+                encoderDrive(1, -20, 3);
+                encoderDrive(1, 30, 3.5);
+                ResetEncoder();
+                EncoderDrive(DriveDirection.STRAFE_LEFT, 1900);
 
 
-
+            }
         }
     }
+}
+
