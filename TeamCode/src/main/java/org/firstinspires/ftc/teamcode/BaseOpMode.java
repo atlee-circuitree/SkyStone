@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.telephony.euicc.DownloadableSubscription;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -262,7 +264,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         //sleep(1000);
 
         // reset angle tracking on new heading.
-        resetAngle();
+        //resetAngle();
     }
 
     public void resetAngle() {
@@ -381,6 +383,20 @@ public abstract class BaseOpMode extends LinearOpMode {
         }
     }
 
+    public void RunSafetyCutoff() {
+        if (Top_Sensor_Rear.getState() && top_motor.getPower() == 1) {
+            top_motor.setPower(0);
+        }
+        else if(Top_Sensor_Front.getState() && top_motor.getPower() == -1)
+        {
+            top_motor.setPower(0);
+        }
+        else if(bottom_touch.getState() && lift_left.getPower() == -1) {
+            lift_left.setPower(0);
+            lift_right.setPower(0);
+        }
+
+    }
 
     public void EncoderDrive(DriveDirection direction, int EncoderValue) {
         if (direction == DriveDirection.STOP) {
@@ -401,6 +417,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 rear_left.setPower(1);
                 rear_right.setPower(-1);
                 sleep(1);
+                RunSafetyCutoff();
             }
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
@@ -418,6 +435,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 rear_left.setPower(-1);
                 rear_right.setPower(1);
                 sleep(1);
+                RunSafetyCutoff();
             }
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
@@ -436,6 +454,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 rear_left.setPower(1);
                 rear_right.setPower(1);
                 sleep(1);
+                RunSafetyCutoff();
             }
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
@@ -450,7 +469,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 rear_left.setPower(-1);
                 rear_right.setPower(-1);
                 sleep(1);
-
+                RunSafetyCutoff();
                 telemetry.addData("Encoder", front_left.getCurrentPosition());
                 telemetry.update();
             }
@@ -470,7 +489,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 rear_left.setPower(1);
                 rear_right.setPower(-1);
                 sleep(1);
-
+                RunSafetyCutoff();
                 telemetry.addData("Encoder", front_left.getCurrentPosition());
                 telemetry.update();
             }
@@ -490,7 +509,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 rear_left.setPower(-1);
                 rear_right.setPower(1);
                 sleep(1);
-
+                RunSafetyCutoff();
                 telemetry.addData("Encoder", front_left.getCurrentPosition());
                 telemetry.update();
             }
@@ -509,7 +528,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 rear_left.setPower(.25);
                 rear_right.setPower(-1);
                 sleep(1);
-
+                RunSafetyCutoff();
                 telemetry.addData( "Encoder", front_left.getCurrentPosition());
                 telemetry.update();
             }
@@ -571,6 +590,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                         rear_left.getCurrentPosition(),
                         rear_right.getCurrentPosition());
                 telemetry.update();
+                RunSafetyCutoff();
             }
 
             // Stop all motion;

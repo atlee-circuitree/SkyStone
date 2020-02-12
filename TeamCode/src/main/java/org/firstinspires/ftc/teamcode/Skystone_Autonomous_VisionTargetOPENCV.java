@@ -86,10 +86,12 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         if (GetSkystonePosition() == 1) {
                 telemetry.addData("Skystone", "FarRight");
                 telemetry.update();
+                Clamp_Left.setPosition(.4);
+                Clamp_Right.setPosition(.4);
                 EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
                 feeder_motor.setPower(1);
-                encoderDrive(1, -50, 3);
-                encoderDrive(1, 30, 3);
+                encoderDrive(1, -36, 3);
+                encoderDrive(1, 12, 3);
                 rotate(90, 0.7);
 
 
@@ -97,8 +99,10 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
                 telemetry.addData("Skystone", "Center");
                 telemetry.update();
                 feeder_motor.setPower(1);
-                encoderDrive(1, -50, 3);
-                encoderDrive(1, 30, 3);
+                Clamp_Left.setPosition(.4);
+                Clamp_Right.setPosition(.4);
+                encoderDrive(1, -36, 3);
+                encoderDrive(1, 12, 3);
                 rotate(90, 0.7);
                 //EncoderDrive(DriveDirection.FORWARD, 200);
 
@@ -107,11 +111,36 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
                 telemetry.addData("Skystone", "FarLeft");
                 telemetry.update();
                 feeder_motor.setPower(1);
+                Clamp_Left.setPosition(.4);
+                Clamp_Right.setPosition(.4);
+                //top_motor.setPower(1);
                 EncoderDrive(DriveDirection.STRAFE_RIGHT, 900);
-                encoderDrive(1, -50, 3);
-                encoderDrive(1, 30, 3);
+
+                /*if(top_motor.getPower() != 0) //didn't hit button during encoder drive
+                {
+                    while(Top_Sensor_Rear.getState())
+                    {
+                        top_motor.setPower(1);
+                    }
+                    top_motor.setPower(0);
+                }
+                Lift(LiftDirection.DOWN);
+                encoderDrive(1, -36, 3);
+
+                if(lift_left.getPower() != 0)
+                {
+                    while(bottom_touch.getState())
+                    {
+                        Lift(LiftDirection.DOWN);
+                    }
+                    Lift(LiftDirection.STOP);
+                }
+
+                 */
+
+                encoderDrive(1, 12, 3);
                 rotate(90, 0.7);
-                encoderDrive(1, 24, 2);
+                encoderDrive(1, 20, 2);
 
         } else {
                 telemetry.addData("Skystone", "Gosh Darn It");
@@ -123,6 +152,8 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
 
         top_motor.setPower(1);
         Lift(LiftDirection.DOWN);
+
+
         while(!problemChild || bottom_touch.getState())
         {
             if (Top_Sensor_Rear.getState()) {
@@ -133,8 +164,11 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
             if (bottom_touch.getState()) {
             } else {
                 Lift(LiftDirection.STOP);
+
             }
         }
+
+         
 
 
         //DOUGLASSES CODE
@@ -158,8 +192,8 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         encoderDrive(DRIVE, 10, 1);
 
         Lift(LiftDirection.UP);
-        Clamp_Left.setPosition(0.7f);
-        Clamp_Right.setPosition(0.3f);
+        Clamp_Left.setPosition(0.8f);
+        Clamp_Right.setPosition(0.1f);
         sleep(400);
         Lift(LiftDirection.STOP);
         sleep(200);
@@ -202,9 +236,10 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         //rotate(-70,1);
 
 
-        EncoderDrive(DriveDirection.BACK_LEFT, 3500);
+        EncoderDrive(DriveDirection.BACK_LEFT, 1000);
+        rotate(-30, .7);
 
-        encoderDrive(DRIVE, 10, 2);
+        encoderDrive(DRIVE, 10, 1);
 
         Lift(LiftDirection.UP);
         Clamp_Left.setPosition(0f);
