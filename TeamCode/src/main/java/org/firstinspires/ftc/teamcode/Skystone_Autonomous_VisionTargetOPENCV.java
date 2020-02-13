@@ -34,6 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
+import java.util.Base64;
+
 /**
  * This 2019-2020 OpMode illustrates the basics of using the Vuforia localizer to determine
  * positioning and orientation of robot on the SKYSTONE FTC field.
@@ -86,6 +88,7 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         if (GetSkystonePosition() == 1) {
                 telemetry.addData("Skystone", "FarRight");
                 telemetry.update();
+            EncoderDrive(DriveDirection.BACK_LEFT, 100);
                 EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
                 feeder_motor.setPower(1);
                 encoderDrive(1, -42, 3);
@@ -111,15 +114,20 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
                 }
             }
 
+
+            encoderDrive(DRIVE, -3,0.75);
+            Block_Pickup.setPosition(1f);
+            sleep(900);
             encoderDrive(DRIVE, 76.5, 5);
-            encoderDrive(DRIVE, -3,1);
+
 
 
         } else if (GetSkystonePosition() == 2) {
                 telemetry.addData("Skystone", "Center");
                 telemetry.update();
                 feeder_motor.setPower(1);
-                encoderDrive(1, -42, 3);
+
+            encoderDrive(1, -42, 3);
                 Clamp_Left.setPosition(.5);
                 Clamp_Right.setPosition(.4);
                 encoderDrive(1, 18, 3);
@@ -141,9 +149,11 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
 
                 }
             }
-
-            encoderDrive(DRIVE, 76.5, 5);
             encoderDrive(DRIVE, -3,1);
+            Block_Pickup.setPosition(1f);
+            sleep(900);
+            encoderDrive(DRIVE, 76.5, 5);
+
 
         } else if (GetSkystonePosition() == 3) {
                 telemetry.addData("Skystone", "FarLeft");
@@ -199,8 +209,11 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
                 }
             }
 
-            encoderDrive(DRIVE, 76.5, 5);
             encoderDrive(DRIVE, -3,1);
+            Block_Pickup.setPosition(1f);
+            sleep(900);
+            encoderDrive(DRIVE, 76.5, 5);
+
 
 
 
@@ -211,14 +224,15 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
 
 
 
-//DOUGLASSES CODE
+//DOUGLAS'S CODE
 
 
-        Block_Pickup.setPosition(1f);
-        sleep(900);
+            //Dropped block, moved to before robot goes under bridge
+        //Block_Pickup.setPosition(1f);
+        //sleep(900);
 
         Lift(LiftDirection.UP);
-        sleep(150);
+        sleep(175);
         Lift(LiftDirection.STOP);
 
         resetAngle();
@@ -232,7 +246,8 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         Clamp_Right.setPosition(0.1f);
         sleep(400);
         Lift(LiftDirection.STOP);
-        sleep(200);
+        Clamp_Left.setPosition(0.8f);
+        Clamp_Right.setPosition(0.1f);
 
         encoderDrive(DRIVE, 2, 1);
 
@@ -242,14 +257,14 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         }
         top_motor.setPower(0);
 
-        feeder_motor.setPower(0);
+        //feeder_motor.setPower(0);
 
         Lift(LiftDirection.DOWN);
         sleep(700);
         Lift(LiftDirection.STOP);
 
-        Block_Pickup.setPosition(.4f);
-        sleep(800);
+
+
         //curvedRotate(-45, .5, 1);
 
 
@@ -270,19 +285,28 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
        */
         //resetAngle();
         //rotate(-70,1);
+        Clamp_Left.setPosition(0.85f);
+        Clamp_Right.setPosition(0.1f);
+        Block_Pickup.setPosition(.4f);
+        EncoderDrive(DriveDirection.BACK_LEFT, 2000);
+        sleep(100);
+
+        //rotate(-80, 1);
+        rotateNoSlowDown(-70, 1);
+
+        //encoderDrive(DRIVE, 10, 2);
 
 
-        EncoderDrive(DriveDirection.BACK_LEFT, 1000);
-        rotate(-60, 1);
-
-        encoderDrive(DRIVE, 10, 1);
 
         Lift(LiftDirection.UP);
-        Clamp_Left.setPosition(0f);
-        Clamp_Right.setPosition(1f);
+        Block_Pickup.setPosition(1f);
         sleep(600);
         Lift(LiftDirection.STOP);
-        encoderDrive(DRIVE, 12, 2);
+        Clamp_Left.setPosition(.5);
+        Clamp_Right.setPosition(.4);
+        Block_Pickup.setPosition(1f);
+        //encoderDrive(DRIVE, 15, 2);
+        EncoderDrive(DriveDirection.FORWARD, 2000);
 
 
         top_motor.setPower(1);

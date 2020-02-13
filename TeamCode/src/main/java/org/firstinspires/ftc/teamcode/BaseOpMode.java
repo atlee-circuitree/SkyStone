@@ -174,6 +174,137 @@ public abstract class BaseOpMode extends LinearOpMode {
      *
      * @param degrees Degrees to turn, + is left - is right
      */
+
+    public void rotateNoSlowDown(int degrees, double power)
+    {
+        NoSlowDownRotate(degrees, power, power);
+    }
+
+    public void NoSlowDownRotate(int degrees, double leftPower, double rightPower) {
+        resetAngle();
+
+       /* if (degrees < 0) {   // turn right.
+            leftPower = leftPower;
+            rightPower = -rightPower;
+        } else if (degrees > 0) {   // turn left.
+            leftPower = -leftPower;
+            rightPower = rightPower;
+        } else return;
+
+        // set power to rotate.
+        front_left.setPower(leftPower);
+        rear_left.setPower(leftPower);
+        front_right.setPower(rightPower);
+        rear_right.setPower(rightPower);
+
+
+        // rotate until turn is completed.
+        if (degrees < 0) {
+            // On right turn we have to get off zero first.
+            while (opModeIsActive() && getAngle() == 0) {
+            }
+
+            while (opModeIsActive() && getAngle() >= degrees) {
+                telemetry.addData("Angle", getAngle());
+                telemetry.update();
+            }
+        } else    // left turn.
+            while (opModeIsActive() && getAngle() <= degrees) {
+                telemetry.addData("Angle", getAngle());
+                telemetry.update();
+            }
+
+       /* // turn the motors off.
+        front_left.setPower(0);
+        rear_left.setPower(0);
+        front_right.setPower(0);
+        rear_right.setPower(0);
+
+
+        */
+
+        resetAngle();
+
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        if (degrees < 0) {   // turn right.
+            leftPower = leftPower;
+            rightPower = -rightPower;
+        } else if (degrees > 0) {   // turn left.
+            leftPower = -leftPower;
+            rightPower = rightPower;
+        } else return;
+
+
+
+        // set power to rotate.
+        front_left.setPower(leftPower);
+        rear_left.setPower(leftPower);
+        front_right.setPower(rightPower);
+        rear_right.setPower(rightPower);
+
+        // rotate until turn is completed.
+        if (degrees < 0) {
+            // On right turn we have to get off zero first.
+            while (opModeIsActive() && getAngle() == 0) {
+            }
+
+            while (opModeIsActive() && getAngle() >= degrees) {
+                telemetry.addData("Angle", getAngle());
+                telemetry.update();
+                if(getAngle() <= (degrees + 20)){
+
+                    telemetry.addData("RotateRight", "SlowingDown");
+                    telemetry.update();
+                    front_left.setPower(1);
+                    rear_left.setPower(1);
+                    front_right.setPower(-1);
+                    rear_right.setPower(-1);
+                }
+
+
+            }
+        } else    // left turn.
+            while (opModeIsActive() && getAngle() <= degrees) {
+                telemetry.addData("Angle", getAngle());
+                telemetry.update();
+                if(getAngle() >= (degrees - 20)){
+                    //double offset = (degrees - getAngle());
+//                    front_left.setPower( Math.pow(leftPower * (offset/(degrees * 0.1)), 2 ));
+//                    rear_left.setPower( Math.pow(leftPower * (offset/(degrees * 0.1)), 2 ));
+//                    front_right.setPower( Math.pow(rightPower * (offset/(degrees * 0.1)), 2 ));
+//                    rear_right.setPower( Math.pow(rightPower * (offset/(degrees * 0.1)), 2 ));
+
+                    telemetry.addData("RotateLeft", "SlowingDown");
+                    telemetry.addData("Angle", getAngle());
+                    telemetry.update();
+                    front_left.setPower(-1);
+                    rear_left.setPower(-1);
+                    front_right.setPower(1);
+                    rear_right.setPower(1);
+                }
+            }
+
+        // turn the motors off.
+        front_left.setPower(0);
+        rear_left.setPower(0);
+        front_right.setPower(0);
+        rear_right.setPower(0);
+
+        // wait for rotation to stop.
+        //simon u DONT NEED 1000 ms sleep
+        //sleep(1000);
+
+        // reset angle tracking on new heading.
+        //resetAngle();
+
+
+
+
+
+    }
+
     public void rotate(int degrees, double power)
     {
         curvedRotate(degrees, power, power);
@@ -524,8 +655,8 @@ public abstract class BaseOpMode extends LinearOpMode {
 
             while(front_left.getCurrentPosition() > -EncoderValue) {
                 front_left.setPower(-1);
-                front_right.setPower(.25);
-                rear_left.setPower(.25);
+                front_right.setPower(.2);
+                rear_left.setPower(.2);
                 rear_right.setPower(-1);
                 sleep(1);
                 RunSafetyCutoff();

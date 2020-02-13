@@ -67,13 +67,21 @@ public class gyro_test extends BaseAutoOpMode {
 
 //unfolds here
         resetAngle();
-        rotate(90, 1);
+
+        //encoderDrive(DRIVE, 2, 1);
+
+
+        rotateNoSlowDown(90, 1);
+        sleep(100);
+
+        EncoderDrive(DriveDirection.BACK_LEFT, -300);
+        //rotate(90, 1);
 
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
 
-        sleep(1000);
+        sleep(5000);
     }
 }
 
