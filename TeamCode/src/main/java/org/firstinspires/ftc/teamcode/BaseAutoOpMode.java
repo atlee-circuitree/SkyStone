@@ -165,12 +165,12 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         lift_left.setPower(0);
         lift_right.setPower(0);
 
-        ///SLEEP STATEMENTS ARE JUST TO TEST
-
-        Release_Servo.setPosition(0f);
+        //Changed Servo Position
+        Release_Servo.setPosition(1f);
         Release_Servo2.setPosition(0f);
         Block_Pickup.setPosition(0.4f);
-        sleep(1000);
+        //completely deleted sleep
+        //sleep(1000);
 
         //sleep(1000);
         //feeder_motor.setPower(-1);

@@ -137,6 +137,11 @@ public abstract class BaseOpMode extends LinearOpMode {
         front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rear_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rear_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rear_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         GetIMU();
     }
