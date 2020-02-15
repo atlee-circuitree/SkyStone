@@ -27,7 +27,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -69,27 +68,39 @@ public class Skystone_Foundation_Red_Only extends BaseAutoOpMode {
 
 
 //unfolds here
-        UnfoldRobot();
-        resetAngle();
+        encoderDrive(DRIVE, 5, 3);
+        UnfoldRobot(); //Created a new method: UnfoldRobotFoundation; 2/15/20 9:45
+        EncoderDrive(DriveDirection.STRAFE_RIGHT, 1337);
 
-        EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000);
+        encoderDrive(DRIVE, 26, 3);
 
-        encoderDrive(DRIVE, 25.5, 3);
-        encoderDrive(DRIVE, 3, 3);
-
+//The robot lowers the foundation clamps
         Clamp_Left.setPosition(0.9f);
         Clamp_Right.setPosition(0f);
         sleep(750);
 
-        resetAngle();
-        rotate(-15, 1);
-        encoderDrive(DRIVE, -18, 4);
-        resetAngle();
-        rotate(-65, 1);
-        encoderDrive(DRIVE, 11.5, 2);
+        //rotate(-15, 1);
+        //encoderDrive(DRIVE, -18, 4);
+       //resetAngle();
+
+        //copied foundation move from skystone code
+      //  EncoderDrive(DriveDirection.STRAFE_LEFT, 500);
+
+        curvedRotate(-90, -.10, -1);
+
+
+//        EncoderDrive(DriveDirection.TURN_RIGHT, 800);
+
+
+        //EncoderDrive(DriveDirection.STRAFE_LEFT, 5000); //added 2/15/20- changing turn to strafe
+        encoderDrive(DRIVE, 6, 2);
         Clamp_Left.setPosition(0);
         Clamp_Left.setPosition(1);
         sleep(750);
+
+
+        encoderDrive(DRIVE, -13, 3);
+
 
         while(!problemChild || bottom_touch.getState()) {
             if (Top_Sensor_Rear.getState()) {
@@ -103,13 +114,16 @@ public class Skystone_Foundation_Red_Only extends BaseAutoOpMode {
             }
         }
 
-        encoderDrive(DRIVE, -50, 5);
+        encoderDrive(DRIVE, -34, 5);
 
 
-
+        /*Ignore for now
+        for (
+         */
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
 
     }
 }
+

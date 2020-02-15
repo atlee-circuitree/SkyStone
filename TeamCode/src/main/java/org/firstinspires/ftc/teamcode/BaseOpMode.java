@@ -82,7 +82,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     static final double     COUNTS_PER_MOTOR_REV    = 2240 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 0.5 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    public static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE           = 1;
     static final double     STRAFE          = 1;
@@ -307,7 +307,12 @@ public abstract class BaseOpMode extends LinearOpMode {
 
     public void rotate(int degrees, double power)
     {
-        curvedRotate(degrees, power, power);
+        if (degrees < 0) {   // turn right.
+            curvedRotate(degrees, power, -power);
+        } else if (degrees > 0) {   // turn left.
+            curvedRotate(degrees, -power, power);
+        } else return;
+
     }
 
     /**
@@ -325,16 +330,6 @@ public abstract class BaseOpMode extends LinearOpMode {
 
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
         // clockwise (right).
-
-        if (degrees < 0) {   // turn right.
-            leftPower = leftPower;
-            rightPower = -rightPower;
-        } else if (degrees > 0) {   // turn left.
-            leftPower = -leftPower;
-            rightPower = rightPower;
-        } else return;
-
-
 
         // set power to rotate.
         front_left.setPower(leftPower);
@@ -542,23 +537,44 @@ public abstract class BaseOpMode extends LinearOpMode {
 
         }
         if (direction == DriveDirection.RIGHT) {
-
+        //    SetDriveMode(Mode.STOP_RESET_ENCODER);
             SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
 
+        //    front_right.setTargetPosition(EncoderValue);
+         //   front_left.setTargetPosition(EncoderValue);
+         //   rear_right.setTargetPosition(EncoderValue);
+         //   rear_left.setTargetPosition(EncoderValue);
+
+         //   front_right.setPower(-1);
+         //   rear_left.setPower(1);
+        //    front_left.setPower(1);
+         //   rear_right.setPower(-1);
+
+         //   while(front_right.isBusy() || front_left.isBusy() || rear_right.isBusy() || rear_left.isBusy() ) {
+
+            // sleep(1);
+          //      RunSafetyCutoff();
+          //  }
 
             while(front_left.getCurrentPosition() < EncoderValue) {
                 front_left.setPower(1);
                 front_right.setPower(-1);
-                rear_left.setPower(1);
-                rear_right.setPower(-1);
-                sleep(1);
+                rear_left.setPower(-1);
+                rear_right.setPower(1);
+                // sleep(1);
                 RunSafetyCutoff();
+                idle();
             }
+
+
+
+
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
 
             //front_left.setTargetPosition(EncoderValue
         }
+
         if (direction == DriveDirection.LEFT) {
 
             SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
@@ -569,8 +585,9 @@ public abstract class BaseOpMode extends LinearOpMode {
                 front_right.setPower(1);
                 rear_left.setPower(-1);
                 rear_right.setPower(1);
-                sleep(1);
+               // sleep(1);
                 RunSafetyCutoff();
+                idle();
             }
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
@@ -588,8 +605,9 @@ public abstract class BaseOpMode extends LinearOpMode {
                 front_right.setPower(1);
                 rear_left.setPower(1);
                 rear_right.setPower(1);
-                sleep(1);
+              //  sleep(1);
                 RunSafetyCutoff();
+                idle();
             }
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
@@ -603,10 +621,11 @@ public abstract class BaseOpMode extends LinearOpMode {
                 front_right.setPower(-1);
                 rear_left.setPower(-1);
                 rear_right.setPower(-1);
-                sleep(1);
+               // sleep(1);
                 RunSafetyCutoff();
                 telemetry.addData("Encoder", front_left.getCurrentPosition());
                 telemetry.update();
+                idle();
             }
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
@@ -627,6 +646,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 RunSafetyCutoff();
                 telemetry.addData("Encoder", front_left.getCurrentPosition());
                 telemetry.update();
+                idle();
             }
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
@@ -647,6 +667,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 RunSafetyCutoff();
                 telemetry.addData("Encoder", front_left.getCurrentPosition());
                 telemetry.update();
+                idle();
             }
 
             SetDriveMode(Mode.STOP_RESET_ENCODER);
@@ -666,6 +687,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 RunSafetyCutoff();
                 telemetry.addData( "Encoder", front_left.getCurrentPosition());
                 telemetry.update();
+                idle();
             }
         }
         if (direction == DriveDirection.TURN_RIGHT) {
@@ -680,6 +702,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 RunSafetyCutoff();
                 telemetry.addData( "Encoder", front_left.getCurrentPosition());
                 telemetry.update();
+                idle();
             }
             SetDriveMode(Mode.STOP_RESET_ENCODER);
         }
@@ -687,7 +710,69 @@ public abstract class BaseOpMode extends LinearOpMode {
 
     }
 
+    public void driveByWire(double drive, double strafe, double turn) {
 
+        telemetry.addData("front_left Encoder Position", front_left.getCurrentPosition());
+        telemetry.addData("rear_left Encoder Position", rear_left.getCurrentPosition());
+        telemetry.addData("front_right Encoder Position", front_right.getCurrentPosition());
+        telemetry.addData("rear_right Encoder Position", rear_right.getCurrentPosition());
+
+        double frontLeftPower;
+        double frontRightPower;
+        double rearLeftPower;
+        double rearRightPower;
+
+        double pi = 3.1415926;
+
+
+     //   double drive = -gamepad1.left_stick_y;
+      //  double strafe = gamepad1.left_stick_x * 1.5;
+      //  double turn = gamepad1.right_stick_x;
+
+       /*
+       double gyroDegrees = getAngle();
+
+       double gyroRadians = gyroDegrees * pi/180;
+       double forwardTemp = drive * Math.cos(gyroRadians) + strafe * Math.sin(gyroRadians);
+       strafe = drive * Math.sin(gyroRadians) + strafe * Math.cos(gyroRadians);
+       drive = forwardTemp;
+*/
+
+
+        frontLeftPower = (drive + strafe + turn);
+        rearLeftPower = (drive - strafe + turn);
+        frontRightPower = (drive - strafe - turn);
+        rearRightPower = (drive + strafe - turn);
+
+
+
+        if (Math.abs(frontLeftPower) > 1 || Math.abs(rearLeftPower) > 1 || Math.abs(frontRightPower) > 1 || Math.abs(rearRightPower) >1) {
+
+            double max = 0;
+            max = Math.max(Math.abs(frontLeftPower),Math.abs(rearLeftPower));
+            max = Math.max(Math.abs(frontRightPower), max);
+            max = Math.max(Math.abs(rearRightPower), max);
+
+            frontLeftPower /= max;
+            rearLeftPower /= max;
+            frontRightPower /= max;
+            rearRightPower /= max;
+
+
+
+        }
+
+
+        front_left.setPower(frontLeftPower);
+        rear_left.setPower(rearLeftPower);
+        front_right.setPower(frontRightPower);
+        rear_right.setPower(rearRightPower);
+
+
+
+
+
+    }
 
     public void encoderDrive(double speed,
                              double distance,

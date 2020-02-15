@@ -31,49 +31,50 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+//import static org.firstinspires.ftc.teamcode.BaseOpMode.DriveDirection.STRAFE_RIGHT;
+
 
 /**
  * This file contains basic code to run a 4 wheeled Mecanum wheel setup. The d-pad controls
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "BridgeOnly", group = "Linear Opmode")
-//@Disabled
-public class Skystone_Autonomous_BridgeOnly extends BaseAutoOpMode {
+@Autonomous(name = "Skystone_StrafingTest", group = "Linear Opmode")
+public class Skystone_StrafingTest extends BaseAutoOpMode {
 
 
-    static final double     COUNTS_PER_MOTOR_REV    = 2240 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 1;
-    static final double     TURN_SPEED              = 1;
+
+    double globalAngle, power = 1, correction;
+
+    int startingSide = -1;  //Set to 1 for blue and -1 for Red
+    boolean problemChild = false;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
-        telemetry.addData("Status", "Resetting Encoders");
+        telemetry.update();
+        telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
 
+        //Assigns hardware devices names and values
 
-
-        GetIMU();
         GetHardware();
-
+        GetIMU();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-        resetAngle();
 
-        UnfoldRobot();
 
-        //PrepareForBridge();
+//unfolds here
+        //UnfoldRobotFoundation(); //Created a new method: UnfoldRobotFoundation; 2/15/20 9:45
 
-        EncoderDrive(DriveDirection.FORWARD, 700);
+        EncoderDrive(DriveDirection.STRAFE_RIGHT, 2679);
 
+
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
 
     }
 }
