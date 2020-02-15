@@ -114,7 +114,7 @@ public abstract class BaseVisionOpMode extends BaseAutoOpMode {
         //waitForStart();
         //runtime.reset();
         //while (opModeIsActive()) {
-            telemetry.addData("Simon", "It's probably going to fail");
+            telemetry.addData("Robot", "It's ready");
             telemetry.update();
             //sleep(100);
             //call movement functions
