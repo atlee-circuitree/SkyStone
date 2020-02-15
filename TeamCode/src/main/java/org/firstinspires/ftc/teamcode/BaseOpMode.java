@@ -68,7 +68,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     public Servo Block_Pickup = null;
     public Servo Capstone = null;
     public Servo Release_Servo = null;
-    //public Servo Release_Servo2 = null;
+    public Servo Release_Servo2 = null;
     public DigitalChannel Top_Sensor_Front = null;
     public DigitalChannel Top_Sensor_Rear = null;
     public DigitalChannel bottom_touch = null;
@@ -107,7 +107,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         Block_Pickup = hardwareMap.get(Servo.class, "Block_Pickup");
         Capstone = hardwareMap.get(Servo.class, "Capstone");
         Release_Servo = hardwareMap.get(Servo.class, "Release_Servo");
-        //Release_Servo2 = hardwareMap.get(Servo.class, "Release_Servo2");
+        Release_Servo2 = hardwareMap.get(Servo.class, "Release_Servo2");
         Top_Sensor_Rear = hardwareMap.get(DigitalChannel.class, "Top_Sensor_Rear");
         Top_Sensor_Front = hardwareMap.get(DigitalChannel.class, "Top_Sensor_Front");
         bottom_touch = hardwareMap.get(DigitalChannel.class, "bottom_touch");
@@ -392,6 +392,9 @@ public abstract class BaseOpMode extends LinearOpMode {
 
         // wait for rotation to stop.
         //simon u DONT NEED 1000 ms sleep
+
+        //DOUG IK I DIDNT WANT TO DELET IT IF IT WS NECESRY
+
         //sleep(1000);
 
         // reset angle tracking on new heading.
@@ -453,7 +456,8 @@ public abstract class BaseOpMode extends LinearOpMode {
         STOP,
         STRAFE_RIGHT,
         STRAFE_LEFT,
-        BACK_LEFT
+        BACK_LEFT,
+        TURN_RIGHT
     }
 
 
@@ -663,6 +667,21 @@ public abstract class BaseOpMode extends LinearOpMode {
                 telemetry.addData( "Encoder", front_left.getCurrentPosition());
                 telemetry.update();
             }
+        }
+        if (direction == DriveDirection.TURN_RIGHT) {
+            SetDriveMode(Mode.RUN_WITHOUT_ENCODERS);
+
+            while(front_left.getCurrentPosition() < EncoderValue) {
+                front_left.setPower(1);
+                front_right.setPower(-1);
+                rear_left.setPower(1);
+                rear_right.setPower(-1);
+                sleep(1);
+                RunSafetyCutoff();
+                telemetry.addData( "Encoder", front_left.getCurrentPosition());
+                telemetry.update();
+            }
+            SetDriveMode(Mode.STOP_RESET_ENCODER);
         }
 
 

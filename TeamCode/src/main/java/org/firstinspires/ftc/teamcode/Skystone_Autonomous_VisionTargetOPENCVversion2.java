@@ -29,12 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.os.strictmode.DiskReadViolation;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-
-import java.util.Base64;
 
 /**
  * This 2019-2020 OpMode illustrates the basics of using the Vuforia localizer to determine
@@ -66,9 +66,9 @@ import java.util.Base64;
  * is explained below.
  */
 
-@Autonomous(name="OPENCV_Targeting_Autonomous", group ="Concept")
+@Autonomous(name="OPENCV_Targeting_AutonomousV2", group ="Concept")
 //@Disabled
-public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
+public class Skystone_Autonomous_VisionTargetOPENCVversion2 extends BaseVisionOpMode {
 
     boolean problemChild = false;
 
@@ -86,11 +86,55 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         UnfoldRobotNoMovement();
 
         if (GetSkystonePosition() == 1) {
+                webcam.closeCameraDevice();
                 telemetry.addData("Skystone", "FarRight");
                 telemetry.update();
-                EncoderDrive(DriveDirection.BACK_LEFT, 100);
-                EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
+                //EncoderDrive(DriveDirection.BACK_LEFT, 100);
+                //EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
                 feeder_motor.setPower(1);
+                encoderDrive(1, -12, 3);
+                ResetEncoder();
+                EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
+                encoderDrive(1, -32, 3.5);
+                Clamp_Left.setPosition(.5);
+                Clamp_Right.setPosition(.4);
+                encoderDrive(1, 18, 3);
+                rotate(90, 0.7);
+
+            top_motor.setPower(1);
+            Lift(LiftDirection.DOWN);
+
+            while(!problemChild || bottom_touch.getState())
+            {
+                if (Top_Sensor_Rear.getState()) {
+                } else {
+                    problemChild = true;
+                    top_motor.setPower(0);
+                }
+                if (bottom_touch.getState()) {
+                } else {
+                    Lift(LiftDirection.STOP);
+
+                }
+            }
+
+
+            EncoderDrive(DriveDirection.BACKWARD, 100);
+            Block_Pickup.setPosition(1f);
+            sleep(600);
+            Lift(LiftDirection.UP);
+            sleep(75);
+            Lift(LiftDirection.STOP);
+            encoderDrive(DRIVE, 76.5, 5);
+
+
+
+        } else if (GetSkystonePosition() == 2) {
+                webcam.closeCameraDevice();
+                telemetry.addData("Skystone", "Center");
+                telemetry.update();
+                feeder_motor.setPower(1);
+
                 encoderDrive(1, -42, 3);
                 Clamp_Left.setPosition(.5);
                 Clamp_Right.setPosition(.4);
@@ -113,45 +157,9 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
 
                 }
             }
-
-
             EncoderDrive(DriveDirection.BACKWARD, 100);
             Block_Pickup.setPosition(1f);
-            sleep(900);
-            encoderDrive(DRIVE, 76.5, 5);
-
-
-
-        } else if (GetSkystonePosition() == 2) {
-                telemetry.addData("Skystone", "Center");
-                telemetry.update();
-                feeder_motor.setPower(1);
-
-            encoderDrive(1, -42, 3);
-                Clamp_Left.setPosition(.5);
-                Clamp_Right.setPosition(.4);
-                encoderDrive(1, 18, 3);
-                rotate(90, 0.7);
-
-            top_motor.setPower(1);
-            Lift(LiftDirection.DOWN);
-
-            while(!problemChild || bottom_touch.getState())
-            {
-                if (Top_Sensor_Rear.getState()) {
-                } else {
-                    problemChild = true;
-                    top_motor.setPower(0);
-                }
-                if (bottom_touch.getState()) {
-                } else {
-                    Lift(LiftDirection.STOP);
-
-                }
-            }
-            EncoderDrive(DriveDirection.BACKWARD, 100);
-            Block_Pickup.setPosition(1f);
-            sleep(900);
+            sleep(600);
             Lift(LiftDirection.UP);
             sleep(75);
             Lift(LiftDirection.STOP);
@@ -159,36 +167,17 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
 
 
         } else if (GetSkystonePosition() == 3) {
+                webcam.closeCameraDevice();
                 telemetry.addData("Skystone", "FarLeft");
                 telemetry.update();
                 feeder_motor.setPower(1);
 
                 //top_motor.setPower(1);
             //strafes right because robot is backwards
+                encoderDrive(1, -12, 3);
+                ResetEncoder();
                 EncoderDrive(DriveDirection.STRAFE_RIGHT, 900);
-
-                /*if(top_motor.getPower() != 0) //didn't hit button during encoder drive
-                {
-                    while(Top_Sensor_Rear.getState())
-                    {
-                        top_motor.setPower(1);
-                    }
-                    top_motor.setPower(0);
-                }
-                Lift(LiftDirection.DOWN);
-                encoderDrive(1, -36, 3);
-
-                if(lift_left.getPower() != 0)
-                {
-                    while(bottom_touch.getState())
-                    {
-                        Lift(LiftDirection.DOWN);
-                    }
-                    Lift(LiftDirection.STOP);
-                }
-
-                 */
-                encoderDrive(1, -42, 3);
+                encoderDrive(1, -32, 3.5);
                 Clamp_Left.setPosition(.5);
                 Clamp_Right.setPosition(.4);
                 encoderDrive(1, 18, 3);
@@ -214,7 +203,11 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
 
             EncoderDrive(DriveDirection.BACKWARD, 100);
             Block_Pickup.setPosition(1f);
-            sleep(900);
+            sleep(600);
+            //Lift up a tiny bit to avoid friction
+            Lift(LiftDirection.UP);
+            sleep(50);
+            Lift(LiftDirection.STOP);
             encoderDrive(DRIVE, 76.5, 5);
 
 
@@ -291,11 +284,14 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         Clamp_Left.setPosition(0.85f);
         Clamp_Right.setPosition(0.1f);
         Block_Pickup.setPosition(.4f);
-        EncoderDrive(DriveDirection.BACK_LEFT, 2000);
+        encoderDrive(1, -25, 3.0);
+        EncoderDrive(DriveDirection.STRAFE_LEFT, 500);
+        EncoderDrive(DriveDirection.TURN_RIGHT, 700);
+
         //sleep(100);
 
         //rotate(-80, 1);
-        rotateNoSlowDown(-70, 1);
+        //rotateNoSlowDown(-70, 1);
 
         //encoderDrive(DRIVE, 10, 2);
 
@@ -308,8 +304,8 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         Clamp_Left.setPosition(.5);
         Clamp_Right.setPosition(.4);
         Block_Pickup.setPosition(1f);
-        //encoderDrive(DRIVE, 15, 2);
-        EncoderDrive(DriveDirection.FORWARD, 2000);
+        encoderDrive(DRIVE, 19, 2);
+        //EncoderDrive(DriveDirection.FORWARD, 1000);
 
 
         top_motor.setPower(1);
@@ -349,8 +345,12 @@ public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
         encoderDrive(DRIVE, -25, 2);
 
         encoderDrive(DRIVE, 25, 2);
-        rotate(-120, 1);
-        encoderDrive(DRIVE, 45, 3);
+        rotate(-150, 1);
+        encoderDrive(DRIVE, -45, 3);
+
+        //why does it rotate perfectly in line with... running into the bridge
+        //rotate(-120, 1);
+        //encoderDrive(DRIVE, 45, 3);
 
 
 
