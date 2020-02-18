@@ -196,7 +196,7 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         Release_Servo.setPosition(1);
         Release_Servo2.setPosition(0);
 
-        sleep(1000);
+        //sleep(1000);
 
 
 //        top_motor.setPower(1);
@@ -210,7 +210,6 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
 //        Block_Pickup.setPosition(0.4f);
 
         feeder_motor.setPower(-1);
-        sleep(2000);
         feeder_motor.setPower(0);
 
     }

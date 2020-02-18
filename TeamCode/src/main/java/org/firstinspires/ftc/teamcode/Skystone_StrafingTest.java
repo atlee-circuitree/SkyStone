@@ -39,8 +39,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "Skystone_Foundation_RedOnly", group = "Linear Opmode")
-public class Skystone_Foundation_Red_Only extends BaseAutoOpMode {
+@Autonomous(name = "Skystone_StrafingTest", group = "Linear Opmode")
+public class Skystone_StrafingTest extends BaseAutoOpMode {
 
 
 
@@ -68,84 +68,10 @@ public class Skystone_Foundation_Red_Only extends BaseAutoOpMode {
 
 
 //unfolds here
-        encoderDrive(DRIVE, 5, 3);
-        UnfoldRobot(); //Created a new method: UnfoldRobotFoundation; 2/15/20 9:45
-        EncoderDrive(DriveDirection.STRAFE_RIGHT, 1337);
+        //UnfoldRobotFoundation(); //Created a new method: UnfoldRobotFoundation; 2/15/20 9:45
 
-        encoderDrive(DRIVE, 26, 3);
+        EncoderDrive(DriveDirection.STRAFE_RIGHT, 2679);
 
-//The robot lowers the foundation clamps
-        Clamp_Left.setPosition(0.9f);
-        Clamp_Right.setPosition(0f);
-        sleep(750);
-
-        //rotate(-15, 1);
-        //encoderDrive(DRIVE, -18, 4);
-       //resetAngle();
-
-        //copied foundation move from skystone code
-      //  EncoderDrive(DriveDirection.STRAFE_LEFT, 500);
-
-        curvedRotate(-90, -.10, -1);
-
-
-//        EncoderDrive(DriveDirection.TURN_RIGHT, 800);
-
-
-        //EncoderDrive(DriveDirection.STRAFE_LEFT, 5000); //added 2/15/20- changing turn to strafe
-        encoderDrive(DRIVE, 6, 2);
-        Clamp_Left.setPosition(0);
-        Clamp_Left.setPosition(1);
-        sleep(750);
-
-        top_motor.setPower(1);
-        Lift(LiftDirection.DOWN);
-        while(!problemChild || bottom_touch.getState()) {
-            if (Top_Sensor_Rear.getState()) {
-            } else {
-                problemChild = true;
-                top_motor.setPower(0);
-            }
-            if (bottom_touch.getState()) {
-            } else {
-                Lift(LiftDirection.STOP);
-            }
-        }
-
-        encoderDrive(DRIVE, -50, 5);
-
-        //Dylan Settersten's contribution, if you are confused or need help, ask Alex English or Phil Issacs for my contact info
-        //replace 1 with the number of stones
-          int SkyNumber = 1;
-        if (SkyNumber == 0){
-
-            encoderDrive(DRIVE, 48, 4);
-
-        } else {
-            for (int BlockCounter = 1; BlockCounter <= SkyNumber; BlockCounter++) {
-
-
-                encoderDrive(DRIVE, 10, 4);
-                EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //if position is negative change to STRAFE_LEFT
-
-                feeder_motor.setPower(-1); //getting that block
-                sleep(250);
-                feeder_motor.setPower(0);
-
-                //grabbing function
-
-                encoderDrive(DRIVE, -10, 4);
-                EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //if first strafe function is STRAFE_RIGHT, change to STRAFE_LEFT
-
-                //placing function
-                //reset height
-
-            }
-        }
-
-        /*Ignore for now
-        for (
-         */
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
