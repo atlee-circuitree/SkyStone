@@ -319,7 +319,34 @@ public abstract class BaseOpMode extends LinearOpMode {
         } else return;
 
     }
+/* Panten working on PID
+    public rotateToAngle(float targetAngle) {
+        float error = targetAngle - getAngle();
+        if (error > threshold)
+            this.rotation =  error*kP
+        return False
+    else:
+        this.rotation = 0
+        return True
 
+    }
+
+
+    function move(fwd, rotation):
+            // This function allows for joystick input
+            this.fwd = fwd
+    this.rotation = rotation
+
+    function execute():
+            // Execute function that should be called every loop
+            this.robotdrive.drive(this.fwd, this.rotation)
+
+            this.fwd = 0
+            this.rotation = 0
+
+*/
+
+ */
     /**
      * Rotate Left or Right the number of degrees.  Does not support turning more than 180 degrees.
      * By passing in different left and right values (e.g. .5 and 1), the robot should travel instead of turning in place
@@ -327,6 +354,10 @@ public abstract class BaseOpMode extends LinearOpMode {
      * @param leftPower
      * @param rightPower
      */
+
+
+
+
     public void curvedRotate(int degrees, double leftPower, double rightPower) {
         //double leftPower, rightPower;
 
