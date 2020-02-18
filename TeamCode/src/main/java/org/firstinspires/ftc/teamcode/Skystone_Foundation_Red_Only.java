@@ -91,6 +91,8 @@ public class Skystone_Foundation_Red_Only extends BaseAutoOpMode {
         Clamp_Left.setPosition(1);
         sleep(750);
 
+        top_motor.setPower(1);
+        Lift(LiftDirection.DOWN);
         while(!problemChild || bottom_touch.getState()) {
             if (Top_Sensor_Rear.getState()) {
             } else {
@@ -105,7 +107,34 @@ public class Skystone_Foundation_Red_Only extends BaseAutoOpMode {
 
         encoderDrive(DRIVE, -50, 5);
 
+        //Dylan Settersten's contribution, if you are confused or need help, ask Alex English or Phil Issacs for my contact info
+        //replace 1 with the number of stones
+          int SkyNumber = 1;
+        if (SkyNumber == 0){
 
+            encoderDrive(DRIVE, 48, 4);
+
+        } else {
+            for (int BlockCounter = 1; BlockCounter <= SkyNumber; BlockCounter++) {
+
+
+                encoderDrive(DRIVE, 10, 4);
+                EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //if position is negative change to STRAFE_LEFT
+
+                feeder_motor.setPower(-1); //getting that block
+                sleep(250);
+                feeder_motor.setPower(0);
+
+                //grabbing function
+
+                encoderDrive(DRIVE, -10, 4);
+                EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //if first strafe function is STRAFE_RIGHT, change to STRAFE_LEFT
+
+                //placing function
+                //reset height
+
+            }
+        }
 
 
         telemetry.addData("Path", "Complete");

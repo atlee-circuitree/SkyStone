@@ -64,12 +64,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
  * is explained below.
  */
 
-@Autonomous(name="OPENCV_Targeting_AutonomousV4", group ="Concept")
+@Autonomous(name="OPENCV_Targeting_AutonomousV6", group ="Concept")
 //@Disabled
-public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOpMode {
+public class Skystone_Autonomous_VisionTargetOPENCVversion6 extends BaseVisionOpMode {
 
     boolean problemChild = false;
-    int SecondSkystonePos = 0;
 
 
     @Override
@@ -86,7 +85,6 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
 
         if (GetSkystonePosition() == 1) {
                 webcam.closeCameraDevice();
-                SecondSkystonePos = 1;
                 telemetry.addData("Skystone", "FarRight");
                 telemetry.update();
                 //EncoderDrive(DriveDirection.BACK_LEFT, 100);
@@ -99,9 +97,9 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
                 Clamp_Left.setPosition(.5);
                 Clamp_Right.setPosition(.4);
                 encoderDrive(1, 18, 3);
-                //reduced by 1, just because it might work
-                rotate(89, 0.7);
+                rotate(90, 0.7);
 
+            encoderDrive(1, -1, 8);
             top_motor.setPower(1);
             Lift(LiftDirection.DOWN);
 
@@ -119,22 +117,19 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
                 }
             }
 
-            encoderDrive(1, -0.5, 0.25);
-            //EncoderDrive(DriveDirection.BACKWARD, 100);
+
+
             Block_Pickup.setPosition(1f);
             sleep(600);
             Lift(LiftDirection.UP);
-            //changed to 25
-            sleep(25);
+            sleep(50);
             Lift(LiftDirection.STOP);
-            //subtracted below from a distance 76.5 to 68.5
-            encoderDrive(DRIVE, 68.5, 5);
+            encoderDrive(DRIVE, 75.65, 8);
 
 
 
         } else if (GetSkystonePosition() == 2) {
                 webcam.closeCameraDevice();
-                SecondSkystonePos = 2;
                 telemetry.addData("Skystone", "Center");
                 telemetry.update();
                 feeder_motor.setPower(1);
@@ -165,16 +160,13 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
             Block_Pickup.setPosition(1f);
             sleep(600);
             Lift(LiftDirection.UP);
-            //changed to 25
-            sleep(25);
+            sleep(75);
             Lift(LiftDirection.STOP);
-            //subtracted 8
-            encoderDrive(DRIVE, 68.5, 5);
+            encoderDrive(DRIVE, 76.5, 5);
 
 
         } else if (GetSkystonePosition() == 3) {
                 webcam.closeCameraDevice();
-                SecondSkystonePos = 3;
                 telemetry.addData("Skystone", "FarLeft");
                 telemetry.update();
                 feeder_motor.setPower(1);
@@ -213,11 +205,9 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
             sleep(600);
             //Lift up a tiny bit to avoid friction
             Lift(LiftDirection.UP);
-            //changed to 25
-            sleep(25);
+            sleep(50);
             Lift(LiftDirection.STOP);
-            //subtracted 8
-            encoderDrive(DRIVE, 68.5, 5);
+            encoderDrive(DRIVE, 76.5, 5);
 
 
 
@@ -241,18 +231,20 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
         Lift(LiftDirection.STOP);
 
         resetAngle();
-        rotate(79, 1);
+        rotate(87, 1);  //compensate for inertia
 
 
-        encoderDrive(DRIVE, 10, 1);
+        //Reduced below drive distance from 10.5 to 9
+        encoderDrive(DRIVE, 10, 3);
 
         Lift(LiftDirection.UP);
         Clamp_Left.setPosition(0.8f);
         Clamp_Right.setPosition(0.1f);
         sleep(400);
         Lift(LiftDirection.STOP);
-        Clamp_Left.setPosition(0.8f);
-        Clamp_Right.setPosition(0.1f);
+        //Clamp_Left.setPosition(0.8f);
+        //Clamp_Right.setPosition(0.1f);
+
 
         encoderDrive(DRIVE, 2, 1);
 
@@ -265,11 +257,12 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
         //feeder_motor.setPower(0);
 
         Lift(LiftDirection.DOWN);
-        sleep(700);
+        sleep(800);
         Lift(LiftDirection.STOP);
 
-
-
+        EncoderDrive(DriveDirection.STRAFE_LEFT, 100);
+        EncoderDrive(DriveDirection.STRAFE_RIGHT, 100);
+        encoderDrive(DRIVE, .5, 1);
         //curvedRotate(-45, .5, 1);
 
 
@@ -290,17 +283,15 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
        */
         //resetAngle();
         //rotate(-70,1);
-
-        //MOVING PLATFORM
-        Clamp_Left.setPosition(0.85f);
-        Clamp_Right.setPosition(0.1f);
-        Block_Pickup.setPosition(.4f);
-        encoderDrive(1, -25, 3.0);
-        //Larson changed below from 500 to 525
-        EncoderDrive(DriveDirection.STRAFE_LEFT, 500);
-
-        //Larson change below was 825 but is now 900
-        EncoderDrive(DriveDirection.TURN_RIGHT, 900);
+       //Clamp_Left.setPosition(0.85f);
+        //Clamp_Right.setPosition(0.1f);
+        Block_Pickup.setPosition(.4f); //release Block
+       // encoderDrive(1, -25, 3.0);
+        resetAngle();
+        rotate(-10, 1);
+        encoderDrive(1, -16, 8);
+        resetAngle();
+        rotate(-80, 1);
 
         //sleep(100);
 
@@ -317,10 +308,13 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
         Lift(LiftDirection.STOP);
         Clamp_Left.setPosition(.5);
         Clamp_Right.setPosition(.4);
-        //Block_Pickup.setPosition(1f);
-        //Simon - Increased below from 19 to 17 to 10 to 25
-        encoderDrive(DRIVE, 10, 2);
+        Block_Pickup.setPosition(1f);
+
+        //Pushing the foundation towards the wall
+        //Larson and Will Stevens - Reduced below drive distance from 19 to 11
+        encoderDrive(DRIVE, 11, 2);
         //EncoderDrive(DriveDirection.FORWARD, 1000);
+
 
         top_motor.setPower(1);
         Lift(LiftDirection.DOWN);
@@ -348,35 +342,28 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
         Lift(LiftDirection.STOP);
         */
 
+       //encoderDrive(DRIVE, -30, 8);
 
-       if(SecondSkystonePos == 1) {
-           //encoderDrive(DRIVE, -30, 8);
-           //reduced by 8 from -68 4:13
-           //Larson increased from -68 to -64
-           //Simon - added lift down to save time
-           //Lift(LiftDirection.DOWN);
-           encoderDrive(DRIVE, -64, 10);
+        encoderDrive(DRIVE, -74 , 8);
 
-           feeder_motor.setPower(1);
+        feeder_motor.setPower(1);
 
-           resetAngle();
-           rotate(-30, 1);
-           encoderDrive(DRIVE, -20, 3);
+        resetAngle();
+        rotate(-30, 1);
+        encoderDrive(DRIVE, -25, 2);
 
-           encoderDrive(DRIVE, 20, 3);
-           rotate(-130, 1);
-           encoderDrive(DRIVE, -25, 4);
-           feeder_motor.setPower(-1);
-           encoderDrive(1, -15, 3);
+        encoderDrive(DRIVE, 25, 2);
+        rotate(-150, 1);
+        encoderDrive(DRIVE, -45, 3);
 
-           //why does it rotate perfectly in line with... running into the bridge
-           //rotate(-120, 1);
-           //encoderDrive(DRIVE, 45, 3);
+        //why does it rotate perfectly in line with... running into the bridge
+        //rotate(-120, 1);
+        //encoderDrive(DRIVE, 45, 3);
 
 
-           telemetry.addData("Simon", "It failed");
-           telemetry.update();
-       }
+
+        telemetry.addData("Simon", "It failed");
+        telemetry.update();
 
 
     }

@@ -27,9 +27,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+//import static org.firstinspires.ftc.teamcode.BaseOpMode.DriveDirection.STRAFE_RIGHT;
 
 
 /**
@@ -37,43 +40,60 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "BridgeOnly", group = "Linear Opmode")
-//@Disabled
-public class Skystone_Autonomous_BridgeOnly extends BaseAutoOpMode {
+@Autonomous(name = "Skystone_Foundation_RedOnlyV5", group = "Linear Opmode")
+public class Skystone_Foundation_Blue_Only extends BaseAutoOpMode {
 
 
-    static final double     COUNTS_PER_MOTOR_REV    = 2240 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 1;
-    static final double     TURN_SPEED              = 1;
-    boolean problemChild;
+
+    double globalAngle, power = 1, correction;
+
+    int startingSide = -1;  //Set to 1 for blue and -1 for Red
+    boolean problemChild = false;
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
-        telemetry.addData("Status", "Resetting Encoders");
+        telemetry.update();
+        telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
 
+        //Assigns hardware devices names and values
 
-
-        GetIMU();
         GetHardware();
-
+        GetIMU();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+
+
+//unfolds here
+        UnfoldRobot();
         resetAngle();
 
-        UnfoldRobotNoMovement();
+        EncoderDrive(DriveDirection.STRAFE_LEFT, 1000);
+
+        encoderDrive(DRIVE, 25.5, 3);
+        encoderDrive(DRIVE, 3, 3);
+
+        Clamp_Left.setPosition(0.9f);
+        Clamp_Right.setPosition(0f);
+        sleep(750);
+
+        resetAngle();
+        rotate(15, 1);
+        encoderDrive(DRIVE, -18, 4);
+        resetAngle();
+        rotate(65, 1);
+        encoderDrive(DRIVE, 11.5, 2);
+        Clamp_Left.setPosition(.2);
+        Clamp_Right.setPosition(.8);
+        sleep(750);
 
         top_motor.setPower(1);
         Lift(LiftDirection.DOWN);
-        while(!problemChild || bottom_touch.getState())
-        {
+        while(!problemChild || bottom_touch.getState()) {
             if (Top_Sensor_Rear.getState()) {
             } else {
                 problemChild = true;
@@ -85,9 +105,42 @@ public class Skystone_Autonomous_BridgeOnly extends BaseAutoOpMode {
             }
         }
 
-        encoderDrive(1, 10, 2.5);
+        encoderDrive(DRIVE, -50, 5);
 
+        /*
+        //replace 1 with the number of stones
+          int SkyNumber = 1;
+        if (SkyNumber == 0){
+
+            encoderDrive(DRIVE, 48, 4);
+
+        } else {
+            for (int BlockCounter = 1; BlockCounter <= SkyNumber; BlockCounter++) {
+
+
+                encoderDrive(DRIVE, 10, 4);
+                EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //if position is negative change to STRAFE_LEFT
+
+                feeder_motor.setPower(-1); //getting that block
+                sleep(250);
+                feeder_motor.setPower(0);
+
+                //grabbing function
+
+                encoderDrive(DRIVE, -10, 4);
+                EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //if first strafe function is STRAFE_RIGHT, change to STRAFE_LEFT
+
+                //placing function
+                //reset height
+
+            }
+        }
+
+         */
+
+
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
 
     }
 }
-

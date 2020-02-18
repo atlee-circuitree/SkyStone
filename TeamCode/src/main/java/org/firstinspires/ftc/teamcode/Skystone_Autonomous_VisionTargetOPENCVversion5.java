@@ -64,9 +64,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
  * is explained below.
  */
 
-@Autonomous(name="OPENCV_Targeting_AutonomousV4", group ="Concept")
+@Autonomous(name="OPENCV_Targeting_AutonomousV5", group ="Concept")
 //@Disabled
-public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOpMode {
+public class Skystone_Autonomous_VisionTargetOPENCVversion5 extends BaseVisionOpMode {
 
     boolean problemChild = false;
     int SecondSkystonePos = 0;
@@ -119,15 +119,15 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
                 }
             }
 
-            encoderDrive(1, -0.5, 0.25);
-            //EncoderDrive(DriveDirection.BACKWARD, 100);
+
+            EncoderDrive(DriveDirection.BACKWARD, 100);
             Block_Pickup.setPosition(1f);
             sleep(600);
             Lift(LiftDirection.UP);
             //changed to 25
             sleep(25);
             Lift(LiftDirection.STOP);
-            //subtracted below from a distance 76.5 to 68.5
+            //subtracted 8
             encoderDrive(DRIVE, 68.5, 5);
 
 
@@ -257,16 +257,32 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
         encoderDrive(DRIVE, 2, 1);
 
 
-        while(Top_Sensor_Front.getState()){
-            top_motor.setPower(-1);
-        }
-        top_motor.setPower(0);
+        //while(Top_Sensor_Front.getState()){
+        //    top_motor.setPower(-1);
+        //}
+        //top_motor.setPower(0);
 
         //feeder_motor.setPower(0);
 
+        //Lift(LiftDirection.DOWN);
+        //sleep(700);
+        //Lift(LiftDirection.STOP);
+
+        //made the lift go all the way down
+        top_motor.setPower(-1);
         Lift(LiftDirection.DOWN);
-        sleep(700);
-        Lift(LiftDirection.STOP);
+        while(!problemChild || bottom_touch.getState())
+        {
+            if (Top_Sensor_Front.getState()) {
+            } else {
+                problemChild = true;
+                top_motor.setPower(0);
+            }
+            if (bottom_touch.getState()) {
+            } else {
+                Lift(LiftDirection.STOP);
+            }
+        }
 
 
 
@@ -296,11 +312,15 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
         Clamp_Right.setPosition(0.1f);
         Block_Pickup.setPosition(.4f);
         encoderDrive(1, -25, 3.0);
-        //Larson changed below from 500 to 525
-        EncoderDrive(DriveDirection.STRAFE_LEFT, 500);
-
-        //Larson change below was 825 but is now 900
-        EncoderDrive(DriveDirection.TURN_RIGHT, 900);
+        resetAngle();
+        //Gyro added
+            EncoderDrive(DriveDirection.STRAFE_LEFT, 500);
+            Drive(DriveDirection.TURN_RIGHT);
+            while (getAngle() >= -90) {
+                telemetry.addData("Angle", getAngle());
+                telemetry.update();
+            }
+            Drive(DriveDirection.STOP);
 
         //sleep(100);
 
@@ -310,19 +330,20 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
         //encoderDrive(DRIVE, 10, 2);
 
 
-
-        Lift(LiftDirection.UP);
-        Block_Pickup.setPosition(1f);
-        sleep(600);
-        Lift(LiftDirection.STOP);
+        //Simon - removed lift up
+        //Lift(LiftDirection.UP);
+        //Simon - removed clamp close
+        //Block_Pickup.setPosition(1f);
+        //sleep(600);
+        //Lift(LiftDirection.STOP);
         Clamp_Left.setPosition(.5);
         Clamp_Right.setPosition(.4);
         //Block_Pickup.setPosition(1f);
-        //Simon - Increased below from 19 to 17 to 10 to 25
+        //Simon - changed below from 19 to 17 to 10 to 25 back to 10
         encoderDrive(DRIVE, 10, 2);
         //EncoderDrive(DriveDirection.FORWARD, 1000);
 
-        top_motor.setPower(1);
+        /*top_motor.setPower(1);
         Lift(LiftDirection.DOWN);
         while(!problemChild || bottom_touch.getState())
         {
@@ -335,18 +356,8 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion4 extends BaseVisionOp
             } else {
                 Lift(LiftDirection.STOP);
             }
-        }
+        } */
 
-       /* while(Top_Sensor_Rear.getState()){
-            top_motor.setPower(1);
-        }
-        top_motor.setPower(0);
-
-        while (bottom_touch.getState()){
-            Lift(LiftDirection.DOWN);
-        }
-        Lift(LiftDirection.STOP);
-        */
 
 
        if(SecondSkystonePos == 1) {

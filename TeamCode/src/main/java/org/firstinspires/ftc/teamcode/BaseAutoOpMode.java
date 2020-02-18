@@ -194,9 +194,10 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         Clamp_Left.setPosition(0.4);
         Clamp_Right.setPosition(.5);
         Release_Servo.setPosition(1);
-        //Release_Servo2.setPosition(1);
+        Release_Servo2.setPosition(0);
 
         sleep(1000);
+
 
 //        top_motor.setPower(1);
 //        craneSafetyTimer.reset();
@@ -210,6 +211,40 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
 
         feeder_motor.setPower(-1);
         sleep(2000);
+        feeder_motor.setPower(0);
+
+    }
+
+    public void UnfoldRobotV2() {
+
+        //encoderDrive(DRIVE, 4, 1);
+        lift_left.setPower(1);
+        lift_right.setPower(-1);
+        sleep(400);
+
+        lift_left.setPower(0);
+        lift_right.setPower(0);
+
+        Clamp_Left.setPosition(0.4);
+        Clamp_Right.setPosition(.5);
+        Release_Servo.setPosition(1);
+        Release_Servo2.setPosition(0);
+
+        sleep(1000);
+
+        encoderDrive(DRIVE, 5, 1);
+
+//        top_motor.setPower(1);
+//        craneSafetyTimer.reset();
+//        while(Top_Sensor_Rear.getState() && craneSafetyTimer.milliseconds() < 2000)
+//        {
+//            top_motor.setPower(1);
+//        }
+//        top_motor.setPower(0);
+
+//        Block_Pickup.setPosition(0.4f);
+        feeder_motor.setPower(1);
+        sleep(1000);
         feeder_motor.setPower(0);
 
     }
