@@ -345,8 +345,6 @@ public abstract class BaseOpMode extends LinearOpMode {
             this.rotation = 0
 
 */
-
- */
     /**
      * Rotate Left or Right the number of degrees.  Does not support turning more than 180 degrees.
      * By passing in different left and right values (e.g. .5 and 1), the robot should travel instead of turning in place
