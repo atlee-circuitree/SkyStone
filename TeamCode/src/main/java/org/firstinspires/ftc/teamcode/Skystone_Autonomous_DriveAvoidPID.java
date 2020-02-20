@@ -101,9 +101,11 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
         pidDrive.enable();
 
         // drive until end of period.
+        int loops = 0;
 
         while (opModeIsActive())
         {
+            loops++;
             // Use PID with imu input to drive in a straight line.
             correction = pidDrive.performPID(getAngle());
 
@@ -111,7 +113,7 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
             telemetry.addData("2 global heading", globalAnglePID);
             telemetry.addData("3 correction", correction);
             telemetry.addData("4 turn rotation", rotation);
-            telemetry.update();
+            telemetry.addData("Loops", loops);
 
             // set power levels.
             front_left.setPower(power - correction);
@@ -129,6 +131,8 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
 
             if (touched || aButton || bButton)
             {
+                telemetry.addData("Button Pushed", "Backing up");
+                telemetry.update();
                 // backup.
                 front_left.setPower(-power);
                 rear_left.setPower(-power);
@@ -143,12 +147,25 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
                 front_right.setPower(0);
                 rear_right.setPower(0);
 
+
                 // turn 90 degrees right.
-                if (touched || aButton) rotatePID(-90, power);
+                if (touched || aButton)
+                {
+                    telemetry.addData("Button Pushed", "Rotating right");
+                    telemetry.update();
+                    rotatePID(-90, power);
+                }
 
                 // turn 90 degrees left.
-                if (bButton) rotatePID(90, power);
+                if (bButton)
+                {
+                    telemetry.addData("Button Pushed", "Rotating left");
+                    telemetry.update();
+                    rotatePID(90, power);
+                }
             }
+            telemetry.update();
+
         }
 
         // turn the motors off.
