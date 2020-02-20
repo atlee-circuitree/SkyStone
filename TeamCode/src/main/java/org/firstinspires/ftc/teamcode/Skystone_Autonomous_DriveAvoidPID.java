@@ -45,7 +45,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 @Autonomous(name = "DriveAvoidPID", group = "Linear Opmode")
 public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
 
-    Orientation lastAngles = new Orientation();
+    Orientation lastAnglesPID = new Orientation();
     double                  globalAnglePID, power = .30, correction, rotation;
     boolean                 aButton, bButton, touched;
     PIDController           pidRotate, pidDrive;
@@ -107,7 +107,7 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
             // Use PID with imu input to drive in a straight line.
             correction = pidDrive.performPID(getAngle());
 
-            telemetry.addData("1 imu heading", lastAngles.firstAngle);
+            telemetry.addData("1 imu heading", lastAnglesPID.firstAngle);
             telemetry.addData("2 global heading", globalAnglePID);
             telemetry.addData("3 correction", correction);
             telemetry.addData("4 turn rotation", rotation);
@@ -163,7 +163,7 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
      */
     void resetAnglePID()
     {
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        lastAnglesPID = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         globalAnglePID = 0;
     }
@@ -181,16 +181,16 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
 
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+        double deltaAnglePID = angles.firstAngle - lastAnglesPID.firstAngle;
 
-        if (deltaAngle < -180)
-            deltaAngle += 360;
-        else if (deltaAngle > 180)
-            deltaAngle -= 360;
+        if (deltaAnglePID < -180)
+            deltaAnglePID += 360;
+        else if (deltaAnglePID > 180)
+            deltaAnglePID -= 360;
 
-        globalAnglePID += deltaAngle;
+        globalAnglePID += deltaAnglePID;
 
-        lastAngles = angles;
+        lastAnglesPID = angles;
 
         return globalAnglePID;
     }
