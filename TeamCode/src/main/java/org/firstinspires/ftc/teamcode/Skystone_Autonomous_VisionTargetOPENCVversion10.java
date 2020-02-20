@@ -350,8 +350,8 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
                 Clamp_Right.setPosition(.4);
                 //Decreased from 20 to 16
                 encoderDrive(1, 16, 3);
-                //changed to 88 (from 89) to compensate for inaccuracy
-                rotate(89, 0.7);
+                //changed to 89 (from 90) to compensate for inaccuracy
+                rotate(90, 0.7);
 
 
             top_motor.setPower(1);
@@ -374,8 +374,8 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
             Lift(LiftDirection.UP);  //Lift up a tiny bit to avoid friction
             sleep(10);
             Lift(LiftDirection.STOP);
-            //Decreased by 8" (from 99")
-            encoderDrive(DRIVE, 91, 8);
+            //increased by 4" (from 91")
+            encoderDrive(DRIVE, 95, 8);
             resetAngle();
             rotate(90, 0.7);  //compensate for inertia (changed to 0.7 from 1)
             //Start of Douglas and Larson Code
@@ -433,8 +433,8 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
                 idle();
             }
             Lift(LiftDirection.STOP);
-
-            encoderDrive(DRIVE, -80 , 8);
+            //decreased to 72 from 80
+            encoderDrive(DRIVE, -72 , 8);
             ResetEncoder();
             EncoderDrive(DriveDirection.STRAFE_LEFT, 1950);
             feeder_motor.setPower(1);
