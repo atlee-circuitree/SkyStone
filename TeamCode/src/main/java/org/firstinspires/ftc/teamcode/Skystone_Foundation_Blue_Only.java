@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "Skystone_Foundation_RedOnlyV5", group = "Linear Opmode")
+//@Autonomous(name = "Skystone_Foundation_Blue_Center", group = "Linear Opmode")
 public class Skystone_Foundation_Blue_Only extends BaseAutoOpMode {
 
 
@@ -70,11 +70,12 @@ public class Skystone_Foundation_Blue_Only extends BaseAutoOpMode {
 //unfolds here
         UnfoldRobot();
         resetAngle();
-
-        EncoderDrive(DriveDirection.STRAFE_LEFT, 1000);
+        //Increased to 1033 from 1000
+        EncoderDrive(DriveDirection.STRAFE_LEFT, 1033);
 
         encoderDrive(DRIVE, 25.5, 3);
-        encoderDrive(DRIVE, 3, 3);
+        //Increased to 4 from 3
+        encoderDrive(DRIVE, 4, 3);
 
         Clamp_Left.setPosition(0.9f);
         Clamp_Right.setPosition(0f);
@@ -82,10 +83,13 @@ public class Skystone_Foundation_Blue_Only extends BaseAutoOpMode {
 
         resetAngle();
         rotate(15, 1);
-        encoderDrive(DRIVE, -18, 4);
+        //Reduced from -18" to -6
+        encoderDrive(DRIVE, -6, 2);
         resetAngle();
+        //Changed from 90 degrees to 65
         rotate(65, 1);
-        encoderDrive(DRIVE, 11.5, 2);
+        //Decreased by 1" (from 14.5)
+        encoderDrive(DRIVE, 13.5, 2);
         Clamp_Left.setPosition(.2);
         Clamp_Right.setPosition(.8);
         sleep(750);
@@ -103,8 +107,9 @@ public class Skystone_Foundation_Blue_Only extends BaseAutoOpMode {
                 Lift(LiftDirection.STOP);
             }
         }
-
-        encoderDrive(DRIVE, -50, 5);
+        //decreased by 5" (from -50)
+        //Decreased from -40 to -30
+        encoderDrive(DRIVE, -30, 5);
 
         /*
         //replace 1 with the number of stones

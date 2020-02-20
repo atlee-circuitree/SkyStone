@@ -157,11 +157,11 @@ public abstract class BaseAutoOpMode extends BaseOpMode {
         feeder_motor.setPower(0);
     }
     public void UnfoldRobotNoMovement() {
-
-        lift_left.setPower(1);
-        lift_right.setPower(-1);
-        sleep(400);
-
+        runtime.reset();
+        while (opModeIsActive() && (runtime.milliseconds() < 400)  ) {
+            lift_left.setPower(1);
+            lift_right.setPower(-1);
+        }
         lift_left.setPower(0);
         lift_right.setPower(0);
 

@@ -42,7 +42,7 @@ import static org.firstinspires.ftc.teamcode.BaseOpMode.DriveDirection.STRAFE_RI
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "NEW AUTO TEST 2", group = "Linear Opmode")
+//@Autonomous(name = "NEW AUTO TEST 2", group = "Linear Opmode")
 public class NEW_AUTO_TEST_2 extends BaseAutoOpMode {
 
 

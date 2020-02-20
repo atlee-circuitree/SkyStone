@@ -82,7 +82,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@TeleOp(name="SKYSTONE Vuforia Nav Webcam Berg", group ="Concept")
+//@TeleOp(name="SKYSTONE Vuforia Nav Webcam Berg", group ="Concept")
 //@Disabled
 public class Systone_Test_ConceptVuforiaSkyStoneNavigationWebcamAdvanced extends BaseOpMode {
 

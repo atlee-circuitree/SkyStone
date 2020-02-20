@@ -69,6 +69,8 @@ public class Skystone_Autonomous_BridgeOnly extends BaseAutoOpMode {
         resetAngle();
 
         UnfoldRobotNoMovement();
+        //SLEEP STATEMENT IS NECESSARY SO THAT LIFT DOES NOT CRUSH FEEDER
+        sleep(1000);
 
         top_motor.setPower(1);
         Lift(LiftDirection.DOWN);
@@ -85,7 +87,7 @@ public class Skystone_Autonomous_BridgeOnly extends BaseAutoOpMode {
             }
         }
 
-        encoderDrive(1, 10, 2.5);
+        encoderDrive(1, 20, 4);
 
 
     }

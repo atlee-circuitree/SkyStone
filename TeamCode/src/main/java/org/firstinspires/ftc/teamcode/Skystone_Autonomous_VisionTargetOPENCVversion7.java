@@ -64,12 +64,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
  * is explained below.
  */
 
-//@Autonomous(name="OPENCV_Targeting_AutonomousV5", group ="Concept")
+//Added on Feb 19, 2020
+
+//@Autonomous(name="OPENCV_Targeting_AutonomousV7", group ="Concept")
 //@Disabled
-public class Skystone_Autonomous_VisionTargetOPENCVversion5 extends BaseVisionOpMode {
+public class Skystone_Autonomous_VisionTargetOPENCVversion7 extends BaseVisionOpMode {
 
     boolean problemChild = false;
-    int SecondSkystonePos = 0;
 
 
     @Override
@@ -86,7 +87,6 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion5 extends BaseVisionOp
 
         if (GetSkystonePosition() == 1) {
                 webcam.closeCameraDevice();
-                SecondSkystonePos = 1;
                 telemetry.addData("Skystone", "FarRight");
                 telemetry.update();
                 //EncoderDrive(DriveDirection.BACK_LEFT, 100);
@@ -98,10 +98,11 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion5 extends BaseVisionOp
                 encoderDrive(1, -32, 3.5);
                 Clamp_Left.setPosition(.5);
                 Clamp_Right.setPosition(.4);
-                encoderDrive(1, 18, 3);
-                //reduced by 1, just because it might work
+                encoderDrive(1, 16, 3);
                 rotate(89, 0.7);
 
+            encoderDrive(1, -2, 3);
+            //EncoderDrive(DriveDirection.BACKWARD, 100);
             top_motor.setPower(1);
             Lift(LiftDirection.DOWN);
 
@@ -120,21 +121,18 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion5 extends BaseVisionOp
             }
 
 
-            EncoderDrive(DriveDirection.BACKWARD, 100);
+
             Block_Pickup.setPosition(1f);
             sleep(600);
             Lift(LiftDirection.UP);
-            //changed to 25
             sleep(25);
             Lift(LiftDirection.STOP);
-            //subtracted 8
-            encoderDrive(DRIVE, 68.5, 5);
+            encoderDrive(DRIVE, 75.65, 8);
 
 
 
         } else if (GetSkystonePosition() == 2) {
                 webcam.closeCameraDevice();
-                SecondSkystonePos = 2;
                 telemetry.addData("Skystone", "Center");
                 telemetry.update();
                 feeder_motor.setPower(1);
@@ -165,16 +163,13 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion5 extends BaseVisionOp
             Block_Pickup.setPosition(1f);
             sleep(600);
             Lift(LiftDirection.UP);
-            //changed to 25
-            sleep(25);
+            sleep(75);
             Lift(LiftDirection.STOP);
-            //subtracted 8
-            encoderDrive(DRIVE, 68.5, 5);
+            encoderDrive(DRIVE, 76.5, 5);
 
 
-        } else if (GetSkystonePosition() == 3) {
+        } else { // (GetSkystonePosition() == 3)
                 webcam.closeCameraDevice();
-                SecondSkystonePos = 3;
                 telemetry.addData("Skystone", "FarLeft");
                 telemetry.update();
                 feeder_motor.setPower(1);
@@ -196,35 +191,27 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion5 extends BaseVisionOp
 
             while(!problemChild || bottom_touch.getState())
             {
-                if (Top_Sensor_Rear.getState()) {
-                } else {
+                if (!Top_Sensor_Rear.getState()) {
                     problemChild = true;
                     top_motor.setPower(0);
                 }
-                if (bottom_touch.getState()) {
-                } else {
+                if (!bottom_touch.getState()) {
                     Lift(LiftDirection.STOP);
-
                 }
             }
 
             EncoderDrive(DriveDirection.BACKWARD, 100);
             Block_Pickup.setPosition(1f);
-            sleep(600);
+            sleep(100);
             //Lift up a tiny bit to avoid friction
             Lift(LiftDirection.UP);
-            //changed to 25
-            sleep(25);
+            sleep(50);
             Lift(LiftDirection.STOP);
-            //subtracted 8
-            encoderDrive(DRIVE, 68.5, 5);
+            encoderDrive(DRIVE, 76.5, 5);
 
 
 
 
-        } else {
-                telemetry.addData("Skystone", "Gosh Darn It");
-                telemetry.update();
         }
 
 
@@ -236,158 +223,84 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion5 extends BaseVisionOp
         //Block_Pickup.setPosition(1f);
         //sleep(900);
 
-        Lift(LiftDirection.UP);
-        sleep(175);
-        Lift(LiftDirection.STOP);
+        //Lift(LiftDirection.UP);
+        //sleep(150);
+        //Lift(LiftDirection.STOP);
 
         resetAngle();
-        rotate(79, 1);
+        rotate(85, 1);  //compensate for inertia
 
 
-        encoderDrive(DRIVE, 10, 1);
+        //Reduced below drive distance from 10 to 8
+        encoderDrive(DRIVE, 6, 3);
 
         Lift(LiftDirection.UP);
         Clamp_Left.setPosition(0.8f);
         Clamp_Right.setPosition(0.1f);
-        sleep(400);
+        sleep(425);
         Lift(LiftDirection.STOP);
-        Clamp_Left.setPosition(0.8f);
-        Clamp_Right.setPosition(0.1f);
+        //Clamp_Left.setPosition(0.8f);
+        //Clamp_Right.setPosition(0.1f);
+
 
         encoderDrive(DRIVE, 2, 1);
 
 
-        //while(Top_Sensor_Front.getState()){
-        //    top_motor.setPower(-1);
-        //}
-        //top_motor.setPower(0);
+        while(Top_Sensor_Front.getState()){
+            top_motor.setPower(-1);
+        }
+        top_motor.setPower(0);
 
         //feeder_motor.setPower(0);
 
-        //Lift(LiftDirection.DOWN);
-        //sleep(700);
-        //Lift(LiftDirection.STOP);
-
-        //made the lift go all the way down
-        top_motor.setPower(-1);
         Lift(LiftDirection.DOWN);
-        while(!problemChild || bottom_touch.getState())
-        {
-            if (Top_Sensor_Front.getState()) {
-            } else {
-                problemChild = true;
-                top_motor.setPower(0);
-            }
-            if (bottom_touch.getState()) {
-            } else {
-                Lift(LiftDirection.STOP);
-            }
-        }
+        sleep(300);
+        Lift(LiftDirection.STOP);
 
-
-
-        //curvedRotate(-45, .5, 1);
-
-
-        //commented out to try 45 backup
-        //resetAngle();
-        //rotate(-10, 1);
-
-        //encoderDrive(DRIVE, -16, 3);
-
-      /*front_left.setPower(-1);
-      front_right.setPower(1);
-      rear_left.setPower(1);
-      rear_right.setPower(-1);
-      //EncoderDrive(DriveDirection.STRAFE_LEFT, 5000);
-      sleep(2000);
-
-
-       */
-        //resetAngle();
-        //rotate(-70,1);
-
-        //MOVING PLATFORM
-        Clamp_Left.setPosition(0.85f);
-        Clamp_Right.setPosition(0.1f);
-        Block_Pickup.setPosition(.4f);
-        encoderDrive(1, -25, 3.0);
         resetAngle();
-        //Gyro added
-            EncoderDrive(DriveDirection.STRAFE_LEFT, 500);
-            Drive(DriveDirection.TURN_RIGHT);
-            while (getAngle() >= -90) {
-                telemetry.addData("Angle", getAngle());
-                telemetry.update();
-            }
-            Drive(DriveDirection.STOP);
-
-        //sleep(100);
-
-        //rotate(-80, 1);
-        //rotateNoSlowDown(-70, 1);
-
-        //encoderDrive(DRIVE, 10, 2);
+        rotate(-15, 1);
+        //increased by 5in (from -10)
+        //Incrased by 10 (from -25)
+        encoderDrive(DRIVE, -14, 2);
+        resetAngle();
+        rotate(-80, 1);
 
 
-        //Simon - removed lift up
-        //Lift(LiftDirection.UP);
-        //Simon - removed clamp close
-        //Block_Pickup.setPosition(1f);
-        //sleep(600);
-        //Lift(LiftDirection.STOP);
-        Clamp_Left.setPosition(.5);
-        Clamp_Right.setPosition(.4);
-        //Block_Pickup.setPosition(1f);
-        //Simon - changed below from 19 to 17 to 10 to 25 back to 10
-        encoderDrive(DRIVE, 10, 2);
-        //EncoderDrive(DriveDirection.FORWARD, 1000);
+        //to wall
+        encoderDrive(DRIVE, 7, 2);
 
-        /*top_motor.setPower(1);
         Lift(LiftDirection.DOWN);
-        while(!problemChild || bottom_touch.getState())
+        sleep(200);
+        Lift(LiftDirection.STOP);
+
+        Clamp_Left.setPosition(.2);
+        Clamp_Right.setPosition(.8);
+        sleep(100);
+
+        Block_Pickup.setPosition(.4f); //release Block
+        encoderDrive(DRIVE, -12, 2);
+        Lift(LiftDirection.DOWN);
+        while(bottom_touch.getState())
         {
-            if (Top_Sensor_Rear.getState()) {
-            } else {
-                problemChild = true;
-                top_motor.setPower(0);
-            }
-            if (bottom_touch.getState()) {
-            } else {
-                Lift(LiftDirection.STOP);
-            }
-        } */
+            idle();
+        }
+        Lift(LiftDirection.STOP);
+        //Changed from -54 to -55
+        encoderDrive(DRIVE, -55 , 8);
+
+        feeder_motor.setPower(1);
+
+        resetAngle();
+        rotate(-30, .7);
+        encoderDrive(DRIVE, -30, 2);
+
+        encoderDrive(DRIVE, 30, 2);
+        rotate(30, .7);
+        encoderDrive(DRIVE, 45, 3);
 
 
 
-       if(SecondSkystonePos == 1) {
-           //encoderDrive(DRIVE, -30, 8);
-           //reduced by 8 from -68 4:13
-           //Larson increased from -68 to -64
-           //Simon - added lift down to save time
-           //Lift(LiftDirection.DOWN);
-           encoderDrive(DRIVE, -64, 10);
-
-           feeder_motor.setPower(1);
-
-           resetAngle();
-           rotate(-30, 1);
-           encoderDrive(DRIVE, -20, 3);
-
-           encoderDrive(DRIVE, 20, 3);
-           rotate(-130, 1);
-           encoderDrive(DRIVE, -25, 4);
-           feeder_motor.setPower(-1);
-           encoderDrive(1, -15, 3);
-
-           //why does it rotate perfectly in line with... running into the bridge
-           //rotate(-120, 1);
-           //encoderDrive(DRIVE, 45, 3);
-
-
-           telemetry.addData("Simon", "It failed");
-           telemetry.update();
-       }
+        telemetry.update();
 
 
     }

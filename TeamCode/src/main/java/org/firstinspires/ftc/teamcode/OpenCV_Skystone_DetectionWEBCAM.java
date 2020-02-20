@@ -32,7 +32,7 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "opencvSkystoneDetectorWEBCAM", group="Sky autonomous")
+//@Autonomous(name= "opencvSkystoneDetectorWEBCAM", group="Sky autonomous")
 //@Disabled//comment out this line before using
 public class OpenCV_Skystone_DetectionWEBCAM extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();

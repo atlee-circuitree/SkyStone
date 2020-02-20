@@ -48,7 +48,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
  * ...Does anybody even read these things? I mean like, this hasn't been updated since I started coding...
  */
 
-@TeleOp(name = "TeleOp", group = "Linear Opmode")
+//@TeleOp(name = "TeleOp", group = "Linear Opmode")
 @Disabled
 public class SkystoneTeleOp_V1 extends LinearOpMode {
 

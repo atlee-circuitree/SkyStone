@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "NEW AUTO TEST SPIT OUT1", group = "Linear Opmode")
+//@Autonomous(name = "NEW AUTO TEST SPIT OUT1", group = "Linear Opmode")
 public class NEW_AUTO_TEST_SPIT_OUT1 extends BaseAutoOpMode {
 
 

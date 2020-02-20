@@ -67,7 +67,7 @@ import java.util.List;
  * is explained below.
  */
 
-@Autonomous(name="Vision_Targeting_Autonomous", group ="Concept")
+//@Autonomous(name="Vision_Targeting_Autonomous", group ="Concept")
 //@Disabled
 public class Skystone_Prod_Autonomous_VisionTarget extends BaseAutoOpMode {
 

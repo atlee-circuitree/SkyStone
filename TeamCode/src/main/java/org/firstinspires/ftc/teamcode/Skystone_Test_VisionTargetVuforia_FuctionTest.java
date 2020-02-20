@@ -67,7 +67,7 @@ import java.util.List;
  * is explained below.
  */
 
-@Autonomous(name="Vuforia_Function_Test", group ="Concept")
+//@Autonomous(name="Vuforia_Function_Test", group ="Concept")
 //@Disabled
 public class Skystone_Test_VisionTargetVuforia_FuctionTest extends BaseVisionOpMode {
 

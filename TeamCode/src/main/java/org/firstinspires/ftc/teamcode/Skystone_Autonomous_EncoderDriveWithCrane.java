@@ -64,7 +64,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
  * is explained below.
  */
 
-@Autonomous(name="EncoderDriveWithCrane", group ="Concept")
+//@Autonomous(name="EncoderDriveWithCrane", group ="Concept")
 //@Disabled
 public class Skystone_Autonomous_EncoderDriveWithCrane extends BaseVisionOpMode {
 

@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  *
  * Displays the first pattern upon init.
  */
-@TeleOp(name="BlinkinExample")
+//@TeleOp(name="BlinkinExample")
 @Disabled
 public class RevBlinkinLedDriver extends OpMode {
 

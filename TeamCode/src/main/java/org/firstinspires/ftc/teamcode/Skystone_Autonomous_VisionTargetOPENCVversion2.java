@@ -66,7 +66,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
  * is explained below.
  */
 
-@Autonomous(name="OPENCV_Targeting_AutonomousV2", group ="Concept")
+//@Autonomous(name="OPENCV_Targeting_AutonomousV2", group ="Concept")
 //@Disabled
 public class Skystone_Autonomous_VisionTargetOPENCVversion2 extends BaseVisionOpMode {
 

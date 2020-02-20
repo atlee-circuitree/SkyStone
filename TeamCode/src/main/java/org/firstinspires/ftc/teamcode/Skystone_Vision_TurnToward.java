@@ -44,7 +44,7 @@ import java.util.List;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "Skystone_Vision_TurnToward", group = "Linear Opmode")
+//@Autonomous(name = "Skystone_Vision_TurnToward", group = "Linear Opmode")
 //@Disabled
 public class Skystone_Vision_TurnToward extends BaseAutoOpMode {
     Comparator<Recognition> compareByAngle = new Comparator<Recognition>() {

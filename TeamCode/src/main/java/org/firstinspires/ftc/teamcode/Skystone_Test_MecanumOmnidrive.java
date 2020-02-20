@@ -47,7 +47,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
  * ...Does anybody even read these things? I mean like, this hasn't been updated since I started coding...
  */
 
-@TeleOp(name = "TestMecanumOmnidrive", group = "Linear Opmode")
+//@TeleOp(name = "TestMecanumOmnidrive", group = "Linear Opmode")
 public class Skystone_Test_MecanumOmnidrive extends BaseOpMode {
 
     @Override

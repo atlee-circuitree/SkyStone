@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "NEW AUTO TEST 1", group = "Linear Opmode")
+//@Autonomous(name = "NEW AUTO TEST 1", group = "Linear Opmode")
 public class NEW_AUTO_TEST_1 extends BaseAutoOpMode {
 
 

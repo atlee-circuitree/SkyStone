@@ -31,21 +31,23 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+//import static org.firstinspires.ftc.teamcode.BaseOpMode.DriveDirection.STRAFE_RIGHT;
+
 
 /**
  * This file contains basic code to run a 4 wheeled Mecanum wheel setup. The d-pad controls
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-//@Autonomous(name = "gyro_test", group = "Linear Opmode")
-public class gyro_test extends BaseAutoOpMode {
+@Autonomous(name = "Skystone_Foundation_Blue_WallSide", group = "Linear Opmode")
+public class Skystone_Foundation_Blue_Wall_Side extends BaseAutoOpMode {
 
 
 
     double globalAngle, power = 1, correction;
 
     int startingSide = -1;  //Set to 1 for blue and -1 for Red
-
+    boolean problemChild = false;
 
     @Override
     public void runOpMode() {
@@ -66,22 +68,84 @@ public class gyro_test extends BaseAutoOpMode {
 
 
 //unfolds here
+        UnfoldRobot();
         resetAngle();
+        //Increased to 1033 from 1000
+        EncoderDrive(DriveDirection.STRAFE_LEFT, 1033);
 
-        //encoderDrive(DRIVE, 2, 1);
+        encoderDrive(DRIVE, 25.5, 3);
+        //Increased to 4 from 3
+        encoderDrive(DRIVE, 4, 3);
+
+        Clamp_Left.setPosition(0.9f);
+        Clamp_Right.setPosition(0f);
+        sleep(750);
+
+        resetAngle();
+        rotate(15, 1);
+        //Reduced from -18" to -6
+        encoderDrive(DRIVE, -6, 2);
+        resetAngle();
+        //Changed from 90 degrees to 65
+        rotate(65, 1);
+        //Decreased by 1" (from 14.5)
+        encoderDrive(DRIVE, 13.5, 2);
+        Clamp_Left.setPosition(.2);
+        Clamp_Right.setPosition(.8);
+        sleep(750);
+
+        top_motor.setPower(1);
+        Lift(LiftDirection.DOWN);
+        while(!problemChild || bottom_touch.getState()) {
+            if (Top_Sensor_Rear.getState()) {
+            } else {
+                problemChild = true;
+                top_motor.setPower(0);
+            }
+            if (bottom_touch.getState()) {
+            } else {
+                Lift(LiftDirection.STOP);
+            }
+        }
+        EncoderDrive(DriveDirection.STRAFE_LEFT, 2000);
+        //decreased by 5" (from -50)
+        //Decreased from -40 to -30
+        encoderDrive(DRIVE, -30, 5);
+
+        /*
+        //replace 1 with the number of stones
+          int SkyNumber = 1;
+        if (SkyNumber == 0){
+
+            encoderDrive(DRIVE, 48, 4);
+
+        } else {
+            for (int BlockCounter = 1; BlockCounter <= SkyNumber; BlockCounter++) {
 
 
-        rotateNoSlowDown(90, 1);
-        sleep(100);
+                encoderDrive(DRIVE, 10, 4);
+                EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //if position is negative change to STRAFE_LEFT
 
-        EncoderDrive(DriveDirection.BACK_LEFT, -300);
-        //rotate(90, 1);
+                feeder_motor.setPower(-1); //getting that block
+                sleep(250);
+                feeder_motor.setPower(0);
+
+                //grabbing function
+
+                encoderDrive(DRIVE, -10, 4);
+                EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //if first strafe function is STRAFE_RIGHT, change to STRAFE_LEFT
+
+                //placing function
+                //reset height
+
+            }
+        }
+
+         */
 
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
 
-        sleep(5000);
     }
 }
-

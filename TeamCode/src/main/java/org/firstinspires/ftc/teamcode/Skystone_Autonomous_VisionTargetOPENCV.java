@@ -66,7 +66,7 @@ import java.util.Base64;
  * is explained below.
  */
 
-@Autonomous(name="OPENCV_Targeting_Autonomous", group ="Concept")
+//@Autonomous(name="OPENCV_Targeting_Autonomous", group ="Concept")
 //@Disabled
 public class Skystone_Autonomous_VisionTargetOPENCV extends BaseVisionOpMode {
 

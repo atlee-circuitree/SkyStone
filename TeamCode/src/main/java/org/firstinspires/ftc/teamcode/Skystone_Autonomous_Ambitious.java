@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "Skystone_Autonomous_Ambitious", group = "Linear Opmode")
+//@Autonomous(name = "Skystone_Autonomous_Ambitious", group = "Linear Opmode")
 public class Skystone_Autonomous_Ambitious extends BaseAutoOpMode {
 
 

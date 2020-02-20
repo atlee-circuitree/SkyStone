@@ -67,7 +67,7 @@ import java.util.List;
  * is explained below.
  */
 
-@Autonomous(name="Vuforia_Targeting_Autonomous", group ="Concept")
+//@Autonomous(name="Vuforia_Targeting_Autonomous", group ="Concept")
 //@Disabled
 public class Skystone_Autonomous_VisionTargetVuforia extends BaseAutoOpMode {
 

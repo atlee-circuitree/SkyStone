@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "Skystone_Foundation_RedOnlyV2", group = "Linear Opmode")
+//@Autonomous(name = "Skystone_Foundation_RedOnlyV2", group = "Linear Opmode")
 public class Skystone_Foundation_Red_OnlyV2 extends BaseAutoOpMode {
 
 

@@ -41,7 +41,7 @@ import java.util.List;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "Test_SkystoneLeftAndTop", group = "Linear Opmode")
+//@Autonomous(name = "Test_SkystoneLeftAndTop", group = "Linear Opmode")
 //@Disabled
 public class Skystone_Test_SkystoneLeftAndTop extends BaseAutoOpMode {
 

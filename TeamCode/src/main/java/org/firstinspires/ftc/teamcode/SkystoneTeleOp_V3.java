@@ -45,7 +45,7 @@ import java.lang.Math;
  * ...Does anybody even read these things? I mean like, this hasn't been updated since I started coding...
  */
 
-@TeleOp(name = "TeleOpV3 Field Drive", group = "Linear Opmode")
+//@TeleOp(name = "TeleOpV3 Field Drive", group = "Linear Opmode")
 public class SkystoneTeleOp_V3 extends BaseOpMode {
 
     // Declare OpMode members.

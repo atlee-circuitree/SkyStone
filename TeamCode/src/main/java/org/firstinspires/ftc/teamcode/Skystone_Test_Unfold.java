@@ -64,7 +64,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
  * is explained below.
  */
 
-@Autonomous(name="UnfoldTest", group ="Concept")
+//@Autonomous(name="UnfoldTest", group ="Concept")
 //@Disabled
 public class Skystone_Test_Unfold extends BaseVisionOpMode {
 
