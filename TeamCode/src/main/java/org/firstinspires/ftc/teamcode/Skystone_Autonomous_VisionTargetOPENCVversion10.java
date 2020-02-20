@@ -296,20 +296,6 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
             ResetEncoder();
             encoderDrive(DRIVE, 8.5, 2);   //to wall
 
-            /*
-            Lift(LiftDirection.DOWN);
-            sleep(200);
-            Lift(LiftDirection.STOP);
-
-            Clamp_Left.setPosition(.2);
-            Clamp_Right.setPosition(.8);
-            sleep(100);
-            Block_Pickup.setPosition(.4f); //release Block
-            sleep(100);
-            Lift(LiftDirection.UP);
-            sleep(25);
-            Lift(LiftDirection.STOP);
-             */
 
             Lift(LiftDirection.DOWN);
             Clamp_Left.setPosition(.2);
@@ -362,11 +348,11 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
                 encoderDrive(1, -32, 3.5);
                 Clamp_Left.setPosition(.5);
                 Clamp_Right.setPosition(.4);
-                encoderDrive(1, 18, 3);
-                //changed to 89 (from 90) to compensate for inaccuracy
+                //Decreased from 20 to 16
+                encoderDrive(1, 16, 3);
+                //changed to 88 (from 89) to compensate for inaccuracy
                 rotate(89, 0.7);
-                //do not need extra forward movement, we compensate for it later
-                //encoderDrive(1, 20, 2);
+
 
             top_motor.setPower(1);
             Lift(LiftDirection.DOWN);
@@ -391,11 +377,11 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
             //Decreased by 8" (from 99")
             encoderDrive(DRIVE, 91, 8);
             resetAngle();
-            rotate(90, 1);  //compensate for inertia
+            rotate(90, 0.7);  //compensate for inertia (changed to 0.7 from 1)
             //Start of Douglas and Larson Code
 
-            //Reduced below drive distance from 8 to 6
-            encoderDrive(DRIVE, 6, 3);
+            //Increased below drive distance from 6 to 8
+            encoderDrive(DRIVE, 8, 3);
 
             Lift(LiftDirection.UP);
             Clamp_Left.setPosition(0.8f);
@@ -418,17 +404,18 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
             sleep(300);
             Lift(LiftDirection.STOP);
 
-            //Turn to Foundation
-            resetAngle();
+
+            resetAngle();       //Turn to Foundation
             rotate(-15, 1);
             encoderDrive(DRIVE, -14, 2);
             resetAngle();
             rotate(-80, 1);
 
 
-            //to wall
             //Changed from 7 to 8.5
-            encoderDrive(DRIVE, 8.5, 2);
+            ResetEncoder();
+            encoderDrive(DRIVE, 8.5, 2);   //to wall
+
 
             Lift(LiftDirection.DOWN);
             Clamp_Left.setPosition(.2);
@@ -439,7 +426,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
             sleep(25);
             Lift(LiftDirection.STOP);
 
-            encoderDrive(DRIVE, -12, 2);
+            encoderDrive(DRIVE, -13, 2);
             Lift(LiftDirection.DOWN);
             while(bottom_touch.getState())
             {
@@ -447,7 +434,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
             }
             Lift(LiftDirection.STOP);
 
-            encoderDrive(DRIVE, -72.5 , 8);
+            encoderDrive(DRIVE, -80 , 8);
             ResetEncoder();
             EncoderDrive(DriveDirection.STRAFE_LEFT, 1950);
             feeder_motor.setPower(1);
@@ -458,7 +445,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10 extends BaseVisionO
             EncoderDrive(DriveDirection.STRAFE_RIGHT, 1950);
             feeder_motor.setPower(1);
             ResetEncoder();
-            encoderDrive(DRIVE, 70, 10);
+            encoderDrive(DRIVE, 78, 10);
 
 
 
