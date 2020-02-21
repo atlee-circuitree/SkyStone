@@ -282,6 +282,22 @@ public abstract class BaseVisionOpMode extends BaseAutoOpMode {
       }
     }
 
+    public int GetSkystonePositionInverted()
+    {
+        if((valLeft == 255) && (valMid == 255)){
+            return(3);
+        }
+        if((valLeft == 255) && (valRight == 255)){
+            return (2);
+        }
+        if((valRight == 255) && (valMid == 255)){
+            return(1);
+        }
+        else{
+            return (0);
+        }
+    }
+
 }
 
 

@@ -31,7 +31,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-
 /**
  OpenCV-based
  */
@@ -40,8 +39,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //Last Edited on Feb 20, 2020 11:22 AM - Larson
 //Edited on Feb 20, 2020 7:40 PM - Berg - reducing the number of small differences between positions 1, 2 and 3
 
-@Autonomous(name = "OPENCV_Targeting_Autonomous_BergTest", group = "Concept")
-public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends BaseVisionOpMode {
+@Autonomous(name = "OPENCV_Targeting_Autonomous_BergTestInverted", group = "Concept")
+public class Skystone_Autonomous_VisionTargetOPENCVversion10_Inverted extends BaseVisionOpMode {
 
     boolean problemChild = false;
 
@@ -58,6 +57,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
 
         UnfoldRobotNoMovement();
 
+        //TODO - figure out how to correctly determine position from the other side
         int SkystonePosition = GetSkystonePosition();
         webcam.closeCameraDevice();
         feeder_motor.setPower(1);
@@ -65,12 +65,12 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
         //Drive into block
         if(SkystonePosition == 1)
         {
-            telemetry.addData("Skystone", "FarRight");
+            telemetry.addData("Skystone", "FarLeft");
             telemetry.update();
             ResetEncoder();
             encoderDrive(1, -12, 3);
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
+            EncoderDrive(DriveDirection.STRAFE_RIGHT, 950);
             ResetEncoder();
             encoderDrive(1, -32, 3.5);
         }
@@ -83,7 +83,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
         }
         else
         {
-            telemetry.addData("Skystone", "FarLeft");
+            telemetry.addData("Skystone", "FarRight");
             telemetry.update();
 
             //top_motor.setPower(1);
@@ -91,7 +91,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
             encoderDrive(1, -12, 3);
             ResetEncoder();
             //increased to 1000 (from 950)
-            EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000);
+            EncoderDrive(DriveDirection.STRAFE_LEFT, 1000);
             ResetEncoder();
             encoderDrive(1, -32, 3.5);
         }
@@ -108,7 +108,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
         if(SkystonePosition == 1)
         {
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_RIGHT, 950); //get back to starting position
+            EncoderDrive(DriveDirection.STRAFE_LEFT, 950); //get back to starting position
 
         }
         else if(SkystonePosition == 2)
@@ -118,11 +118,11 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
         else
         {
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //get back to starting position
+            EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //get back to starting position
         }
 
         //Turn towards Foundation side
-        rotate(90, 0.7);
+        rotate(-90, 0.7);
 
         //Position Crane and Lift before going under bridge
         top_motor.setPower(1);
@@ -154,7 +154,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
         encoderDrive(DRIVE, 86.5, 8);
 
         //Turn towards foundation
-        rotate(90, 1);
+        rotate(-90, 1);
         ResetEncoder();
         encoderDrive(DRIVE, 6, 3);
 
@@ -181,11 +181,11 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
 
 
         resetAngle();  //Turn to wall
-        rotate(-15, 1);
+        rotate(15, 1);
         ResetEncoder();
         encoderDrive(DRIVE, -14, 2);
         resetAngle();
-        rotate(-85, 1);
+        rotate(85, 1);
 
 
         ResetEncoder();
