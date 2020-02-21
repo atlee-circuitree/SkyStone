@@ -46,7 +46,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
 
     Orientation lastAnglesPID = new Orientation();
-    double                  globalAnglePID, power = .30, correction, rotation;
+    double                  globalAnglePID, power = .30, rotatePower = 1, correction, rotation;
     boolean                 aButton, bButton, touched;
     PIDController           pidRotate, pidDrive;
 
@@ -58,6 +58,8 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
         GetIMU();
         GetHardware();
 
+        ResetEncoder();
+
         // get a reference to REV Touch sensor.
         //touch = hardwareMap.touchSensor.get("touch_sensor");
 
@@ -65,7 +67,7 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
         // Set PID proportional value to start reducing power at about 50 degrees of rotation.
         // P by itself may stall before turn completed so we add a bit of I (integral) which
         // causes the PID controller to gently increase power if the turn is not completed.
-        pidRotate = new PIDController(.003, .00003, 0);
+        pidRotate = new PIDController(0,0,0);
 
         // Set PID proportional value to produce non-zero correction value when robot veers off
         // straight line. P value controls how sensitive the correction is.
@@ -153,7 +155,7 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
                 {
                     telemetry.addData("Button Pushed", "Rotating right");
                     telemetry.update();
-                    rotatePID(-90, power);
+                    rotatePID(-90, rotatePower);
                 }
 
                 // turn 90 degrees left.
@@ -161,7 +163,7 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
                 {
                     telemetry.addData("Button Pushed", "Rotating left");
                     telemetry.update();
-                    rotatePID(90, power);
+                    rotatePID(90, rotatePower);
                 }
             }
             telemetry.update();
@@ -221,23 +223,26 @@ public class Skystone_Autonomous_DriveAvoidPID extends BaseAutoOpMode {
         // restart imu angle tracking.
         resetAnglePID();
 
-        // if degrees > 359 we cap at 359 with same sign as original degrees.
+        // If input degrees > 359, we cap at 359 with same sign as input.
         if (Math.abs(degrees) > 359) degrees = (int) Math.copySign(359, degrees);
 
         // start pid controller. PID controller will monitor the turn angle with respect to the
-        // target angle and reduce power as we approach the target angle. This is to prevent the
-        // robots momentum from overshooting the turn after we turn off the power. The PID controller
-        // reports onTarget() = true when the difference between turn angle and target angle is within
-        // 1% of target (tolerance) which is about 1 degree. This helps prevent overshoot. Overshoot is
-        // dependant on the motor and gearing configuration, starting power, weight of the robot and the
-        // on target tolerance. If the controller overshoots, it will reverse the sign of the output
-        // turning the robot back toward the setpoint value.
+        // target angle and reduce power as we approach the target angle. We compute the p and I
+        // values based on the input degrees and starting power level. We compute the tolerance %
+        // to yield a tolerance value of about 1 degree.
+        // Overshoot is dependant on the motor and gearing configuration, starting power, weight
+        // of the robot and the on target tolerance.
 
         pidRotate.reset();
+
+        double p = Math.abs(power/degrees);
+        double i = p / 100.0;
+        pidRotate.setPID(p, i, 0);
+
         pidRotate.setSetpoint(degrees);
         pidRotate.setInputRange(0, degrees);
         pidRotate.setOutputRange(0, power);
-        pidRotate.setTolerance(1);
+        pidRotate.setTolerance(1.0 / Math.abs(degrees) * 100.0);
         pidRotate.enable();
 
         // getAnglePID() returns + when rotating counter clockwise (left) and - when rotating
