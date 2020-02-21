@@ -310,6 +310,143 @@ public abstract class BaseOpMode extends LinearOpMode {
 
     }
 
+    //PID rotation variables
+    Orientation lastAnglesPID = new Orientation();
+    double cumulativeDegrees = 0;
+    double                  globalAnglePID, power = .30, rotatePower = 1, correction, rotation;
+
+    public void rotatePID_InPlace(int degrees, double power)
+    {
+        cumulativeDegrees += degrees;
+        resetAnglePID();
+        double targetDegrees = ((cumulativeDegrees % 360) - getAnglePID());
+        PIDController pidRotate = new PIDController(0,0,0);
+        rotatePID(targetDegrees, power, pidRotate);
+    }
+
+    /**
+     * Rotate left or right the number of degrees. Does not support turning more than 359 degrees.
+     * @param degrees Degrees to turn, + is left - is right
+     */
+    public void rotatePID(double degrees, double power, PIDController pidRotate)
+    {
+        // restart imu angle tracking.
+        //resetAnglePID();
+
+        // If input degrees > 359, we cap at 359 with same sign as input.
+        if (Math.abs(degrees) > 359) degrees = (int) Math.copySign(359, degrees);
+
+        // start pid controller. PID controller will monitor the turn angle with respect to the
+        // target angle and reduce power as we approach the target angle. We compute the p and I
+        // values based on the input degrees and starting power level. We compute the tolerance %
+        // to yield a tolerance value of about 1 degree.
+        // Overshoot is dependant on the motor and gearing configuration, starting power, weight
+        // of the robot and the on target tolerance.
+
+        pidRotate.reset();
+
+        double p = Math.abs(power/degrees);
+        double i = p / 100.0;
+        pidRotate.setPID(p, i, 0);
+
+        pidRotate.setSetpoint(degrees);
+        pidRotate.setInputRange(0, degrees);
+        pidRotate.setOutputRange(0, power);
+        pidRotate.setTolerance(1.0 / Math.abs(degrees) * 100.0);
+        pidRotate.enable();
+
+        // getAnglePID() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        // rotate until turn is completed.
+
+        if (degrees < 0)
+        {
+            // On right turn we have to get off zero first.
+            while (opModeIsActive() && getAnglePID() == 0)
+            {
+                front_left.setPower(power);
+                rear_left.setPower(power);
+                front_right.setPower(-power);
+                rear_right.setPower(-power);
+                sleep(100);
+            }
+
+            do
+            {
+                power = pidRotate.performPID(getAnglePID()); // power will be - on right turn.
+                front_left.setPower(-power);
+                rear_left.setPower(-power);
+                front_right.setPower(power);
+                rear_right.setPower(power);
+            } while (opModeIsActive() && !pidRotate.onTarget());
+        }
+        else    // left turn.
+            do
+            {
+                power = pidRotate.performPID(getAnglePID()); // power will be + on left turn.
+                front_left.setPower(-power);
+                rear_left.setPower(-power);
+                front_right.setPower(power);
+                rear_right.setPower(power);
+            } while (opModeIsActive() && !pidRotate.onTarget());
+
+        // turn the motors off.
+        front_left.setPower(0);
+        rear_left.setPower(0);
+        front_right.setPower(0);
+        rear_right.setPower(0);
+
+        rotation = getAnglePID();
+
+        telemetry.addData("2 global heading", globalAnglePID);
+        telemetry.update();
+
+
+        // wait for rotation to stop.
+        sleep(500);
+
+        // reset angle tracking on new heading.
+        //resetAnglePID();
+    }
+
+    /**
+     * Resets the cumulative angle tracking to zero.
+     */
+    void resetAnglePID()
+    {
+        lastAnglesPID = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        //globalAnglePID = 0;
+    }
+
+    /**
+     * Get current cumulative angle rotation from last reset.
+     * @return Angle in degrees. + = left, - = right from zero point.
+     */
+    private double getAnglePID()
+    {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAnglePID = angles.firstAngle - lastAnglesPID.firstAngle;
+
+        if (deltaAnglePID < -180)
+            deltaAnglePID += 360;
+        else if (deltaAnglePID > 180)
+            deltaAnglePID -= 360;
+
+        globalAnglePID += deltaAnglePID;
+
+        lastAnglesPID = angles;
+
+        return globalAnglePID;
+    }
+
     public void rotate(int degrees, double power)
     {
         if (degrees < 0) {   // turn right.
