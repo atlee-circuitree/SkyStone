@@ -401,10 +401,10 @@ public class SkystoneTeleOp_V2 extends LinearOpMode {
 */
 
 
-        frontLeftPower = (drive + strafe + turn);
-        rearLeftPower = (drive - strafe + turn);
-        frontRightPower = (drive - strafe - turn);
-        rearRightPower = (drive + strafe - turn);
+        frontLeftPower = (drive + strafe + turn);  // - correction
+        rearLeftPower = (drive - strafe + turn);  // + correction
+        frontRightPower = (drive - strafe - turn);  // + correction
+        rearRightPower = (drive + strafe - turn);  // - correction
 
 
 

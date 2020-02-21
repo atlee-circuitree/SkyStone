@@ -121,6 +121,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
             EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //get back to starting position
         }
 
+        ResetEncoder();
         //Turn towards Foundation side
         rotate(90, 0.7);
 
