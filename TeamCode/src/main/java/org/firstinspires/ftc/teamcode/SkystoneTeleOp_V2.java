@@ -455,7 +455,8 @@ public class SkystoneTeleOp_V2 extends LinearOpMode {
         //cap stone
         if (gamepad2.a) {
             telemetry.addData("Capstone", "Capstone");
-            Capstone.setPosition(0.3);
+            //Simon - Changed to 0
+            Capstone.setPosition(0);
         }
     }
 

@@ -41,8 +41,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //Edited on Feb 20, 2020 7:40 PM - Berg - reducing the number of small differences between positions 1, 2 and 3
 ///Edited on Feb 20, 2020 1:46 PM - Larson - Angled robot by 5 degrees after each strafes. The robot Strafes 5 degrees of constantly.
 
-@Autonomous(name = "OPENCV_Targeting_Autonomous_BergTest", group = "Concept")
-public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends BaseVisionOpMode {
+@Autonomous(name = "OPENCV_Targeting_AutonomousNoPlatform", group = "Concept")
+public class Skystone_Autonomous_VisionTargetOPENCVBlocksBridge extends BaseVisionOpMode {
 
     boolean problemChild = false;
 
@@ -127,12 +127,12 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
         //11:32 Simon - Rotated 3* more
         //1:09 Larson - Rotate 2 more
         resetAngle();
-        rotate(92, 0.7);
+        rotate(-85, 0.7);
 
         //Position Crane and Lift before going under bridge
         //added a drive back function since the block was not fully in control
-        ResetEncoder();
-        encoderDrive(1, -1, .5);
+        //ResetEncoder();
+        //encoderDrive(1, -1, .5);
         top_motor.setPower(1);
         Lift(LiftDirection.DOWN);
 
@@ -149,122 +149,41 @@ public class Skystone_Autonomous_VisionTargetOPENCVversion10_CommonCode extends 
             }
         }
 
-        //Grab block and lift up slightly
-        Block_Pickup.setPosition(1f);
-        sleep(300);
+
         feeder_motor.setPower(0);  //conserve battery
-        Lift(LiftDirection.UP);
-        sleep(10);
-        Lift(LiftDirection.STOP);
+
 
         //Drive to foundation side
         ResetEncoder();
-        encoderDrive(DRIVE, 86.5, 8);
 
-        //Turn towards foundation
-        rotate(90, 1);
-        ResetEncoder();
-        //11:00 Simon - increased by 4" (from 10") to grab platform more reliably
-        encoderDrive(DRIVE, 10, 3);
+        encoderDrive(DRIVE, -35, 4);
 
-        Lift(LiftDirection.UP);
-        //Grab foundation
-        Clamp_Left.setPosition(0.8f);
-        Clamp_Right.setPosition(0.1f);
-
-        sleep(450); //Wait for clamps to grab foundation
-        Lift(LiftDirection.STOP);
-
-        //Drive towards foundation more
-        ResetEncoder();
-        encoderDrive(DRIVE, 2.5, 1);
-
-        //move crane to front
-        while (Top_Sensor_Front.getState()) {
-            top_motor.setPower(-1);
-        }
-        top_motor.setPower(0);
-
-        Lift(LiftDirection.DOWN);
-        sleep(350);
-        Lift(LiftDirection.STOP);
+        feeder_motor.setPower(-1);
+        sleep(300);
+        rotate(-175, 1);
 
 
-        resetAngle();  //Turn to wall
-        rotate(-15, 1);
-        ResetEncoder();
-        //12:10 Larson - increased by 2in (from -18")
-        encoderDrive(DRIVE, -20, 2);
-        resetAngle();
-        rotate(-85, 1);
-
-
-        ResetEncoder();
-        encoderDrive(DRIVE, 10, 2);   //to wall
-
-        //Release clamps and drop block
-        Lift(LiftDirection.DOWN);
-        Clamp_Left.setPosition(.2);
-        Clamp_Right.setPosition(.8);
-        Block_Pickup.setPosition(.4f);   //release Block
-        sleep(200);
-        Lift(LiftDirection.UP);
-        sleep(10);
-        Lift(LiftDirection.STOP);
-
-        //Move away from foundation - get ready to go under bridge
-        ResetEncoder();
-        encoderDrive(DRIVE, -12, 2);
-        Lift(LiftDirection.DOWN);
-        while (bottom_touch.getState()) {
-            idle();
-        }
-        Lift(LiftDirection.STOP);
-
-        //Drive back to 2nd skystone - 8 inches between each stone
-        ResetEncoder();
         if(SkystonePosition == 1)
         {
-            encoderDrive(DRIVE, -64, 8);
+            encoderDrive(DRIVE, -44, 10);
         }
         else if(SkystonePosition == 2)
         {
-            encoderDrive(DRIVE, -72, 8);
+            encoderDrive(DRIVE, -52, 10);
         }
         else
         {
-            encoderDrive(DRIVE, -80, 8);
+            encoderDrive(DRIVE, -60, 10);
         }
-
-        //knock other blocks out of the way, pick up stone
-        ResetEncoder();
-        //Simon - increased by 600
         EncoderDrive(DriveDirection.STRAFE_LEFT, 1800);
         feeder_motor.setPower(1);
         ResetEncoder();
-        //Get stone into bay
         encoderDrive(DRIVE, -11, 2);
-        feeder_motor.setPower(0);
+        //feeder_motor.setPower(0);
         ResetEncoder();
-        //Drive back into lane
-        EncoderDrive(DriveDirection.STRAFE_RIGHT, 1200);
-        feeder_motor.setPower(1);
-
-        rotate(5, 1);
-        //Drive back to foundation side
-        ResetEncoder();
-        if(SkystonePosition == 1)
-        {
-            encoderDrive(DRIVE, 79, 10);
-        }
-        else if(SkystonePosition == 2)
-        {
-            encoderDrive(DRIVE, 87, 10);
-        }
-        else
-        {
-            encoderDrive(DRIVE, 95, 10);
-        }
+        EncoderDrive(DriveDirection.STRAFE_RIGHT, 1800);
+        //feeder_motor.setPower(1);
+        encoderDrive(1, 60, 4);
 
         telemetry.update();
     }
