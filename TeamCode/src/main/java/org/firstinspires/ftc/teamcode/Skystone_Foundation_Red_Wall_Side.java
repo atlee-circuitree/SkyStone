@@ -108,36 +108,89 @@ public class Skystone_Foundation_Red_Wall_Side extends BaseAutoOpMode {
         EncoderDrive(DriveDirection.STRAFE_RIGHT, 2000);
         encoderDrive(DRIVE, -30, 5);
 
-        /*
         //replace 1 with the number of stones
-          int SkyNumber = 1;
-        if (SkyNumber == 0){
+        int SkyNumber = 4;
+        if (SkyNumber == 0) {
 
-            encoderDrive(DRIVE, 48, 4);
+            encoderDrive(DRIVE, -6, 2);
 
         } else {
             for (int BlockCounter = 1; BlockCounter <= SkyNumber; BlockCounter++) {
-
-
-                encoderDrive(DRIVE, 10, 4);
-                EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //if position is negative change to STRAFE_LEFT
-
-                feeder_motor.setPower(-1); //getting that block
+                telemetry.addData("For Loop Counter", BlockCounter);
+                telemetry.update();
+                //Return tail back and lowest crane position
+                top_motor.setPower(1);
+                Lift(LiftDirection.DOWN);
+                while (!problemChild || bottom_touch.getState()) {
+                    if (Top_Sensor_Rear.getState()) {
+                    } else {
+                        problemChild = true;
+                        top_motor.setPower(0);
+                    }
+                    if (bottom_touch.getState()) {
+                    } else {
+                        Lift(LiftDirection.STOP);
+                    }
+                }
+                feeder_motor.setPower(1); //getting that block
                 sleep(250);
+
+                encoderDrive(DRIVE, -18, 2);
+
+
+                encoderDrive(1, -2, 3);
+                //EncoderDrive(DriveDirection.BACKWARD, 100);
+                Block_Pickup.setPosition(1f);
+                sleep(300);
                 feeder_motor.setPower(0);
 
-                //grabbing function
+                Lift(LiftDirection.UP);
+                sleep(100); //changed from 10ms to 100ms 8:32
+                Lift(LiftDirection.STOP);
 
-                encoderDrive(DRIVE, -10, 4);
-                EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //if first strafe function is STRAFE_RIGHT, change to STRAFE_LEFT
+                encoderDrive(DRIVE, 20, 3);
 
-                //placing function
-                //reset height
+                Lift(LiftDirection.UP);
+                sleep(425);
+                Lift(LiftDirection.STOP);
+                //Clamp_Left.setPosition(0.8f);
+                //Clamp_Right.setPosition(0.1f);
+
+
+                while(Top_Sensor_Front.getState()){
+                    top_motor.setPower(-1);
+                }
+                top_motor.setPower(0);
+
+                Lift(LiftDirection.DOWN);
+                sleep(400);
+                Lift(LiftDirection.STOP);
+
+                Block_Pickup.setPosition(.4f);   //release Block
+                sleep(300);
+
+                //Lift(LiftDirection.DOWN);
+                //sleep(100);
+                //Lift(LiftDirection.STOP);
+
+
+
+
+                Lift(LiftDirection.UP);
+                sleep(800);
+                Lift(LiftDirection.STOP);
+                //Clamp_Left.setPosition(0.8f);
+                //Clamp_Right.setPosition(0.1f);
+
+
+                while(Top_Sensor_Front.getState()){
+                    top_motor.setPower(1);
+                }
+                top_motor.setPower(0);
+
 
             }
         }
-
-         */
 
 
         telemetry.addData("Path", "Complete");

@@ -39,9 +39,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //Added on Feb 20, 2020 11:22 AM
 //Last Edited on Feb 20, 2020 11:22 AM - Larson
 //Edited on Feb 20, 2020 7:40 PM - Berg - reducing the number of small differences between positions 1, 2 and 3
+///Edited on Feb 20, 2020 1:46 PM - Larson - Angled robot by 5 degrees after each strafes. The robot Strafes 5 degrees of constantly.
 
-@Autonomous(name = "TWO_STONES_BLUE", group = "Concept")
-public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVisionOpMode {
+@Autonomous(name = "ONE_STONEBLUE", group = "Concept")
+public class Skystone_Autonomous_ONE_STONEBLUE extends BaseVisionOpMode {
 
     boolean problemChild = false;
 
@@ -69,7 +70,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVision
             ResetEncoder();
             encoderDrive(1, -12, 3);
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
+            EncoderDrive(DriveDirection.STRAFE_RIGHT, 950); //change to right
             ResetEncoder();
             encoderDrive(1, -32, 3.5);
 
@@ -78,6 +79,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVision
             telemetry.update();
             ResetEncoder();
             encoderDrive(1, -44, 3);
+
         } else {
             telemetry.addData("Skystone", "FarLeft");
             telemetry.update();
@@ -87,98 +89,68 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVision
             encoderDrive(1, -12, 3);
             ResetEncoder();
             //increased to 1000 (from 950)
-            EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000);
+            EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //changed to LEFT
             ResetEncoder();
             encoderDrive(1, -32, 3.5);
         }
 
-        //position clamps
+        //position clamps so crane can move freely
         Clamp_Left.setPosition(.5);
         Clamp_Right.setPosition(.4);
 
         //Drive back into lane
         ResetEncoder();
-        encoderDrive(1, 19, 3);
+        encoderDrive(1, 16.5, 3);
 
         //Move back to common position
         if(SkystonePosition == 1) {
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_RIGHT, 950); //get back to starting position
+            EncoderDrive(DriveDirection.STRAFE_LEFT, 950); //Changed to Left
 
         } else if(SkystonePosition == 2) {
-            //no change needed
+            //No action needed
+
         } else {
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //get back to starting position
+            EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //Changed to RIGHT
         }
 
         ResetEncoder();
-        //Turn towards Foundation side
-        rotate(90, 0.7);
+
+        resetAngle();
+        rotate(-90, 0.7); //inverted
 
         //Position Crane and Lift before going under bridge
+        //added a drive back function since the block was not fully in control
+        ResetEncoder();
+        encoderDrive(1, -1, .5);
         top_motor.setPower(1);
         Lift(LiftDirection.DOWN);
 
         while (!problemChild || bottom_touch.getState()) {
             if (Top_Sensor_Rear.getState()) {
+                //No action needed
             } else {
                 problemChild = true;
                 top_motor.setPower(0);
             }
             if (bottom_touch.getState()) {
+                //No action needed
             } else {
                 Lift(LiftDirection.STOP);
 
             }
         }
 
+        //Drive to foundation side
         ResetEncoder();
-        encoderDrive(DRIVE, -48, 8);
+        encoderDrive(DRIVE, 40, 6);
         feeder_motor.setPower(-1);
         sleep(500);
-        feeder_motor.setPower(1);
-        rotate(-90, 1); //to 90 from 175
-
-        //Drive back to 2nd skystone - 8 inches between each stone
-        ResetEncoder();
-        if(SkystonePosition == 1) {
-            encoderDrive(DRIVE, 56, 5); //made positive
-        } else if(SkystonePosition == 2) {
-            encoderDrive(DRIVE, 72, 8); //made positive
-        } else {
-            encoderDrive(DRIVE, 72, 8); //made positive
-        }
-
-
-
-        ResetEncoder();
-        EncoderDrive(DriveDirection.STRAFE_LEFT, 1900);
-        feeder_motor.setPower(1);
-        ResetEncoder();
-        //Get stone into bay
-        encoderDrive(DRIVE, -10, 2);
+        encoderDrive(1,-10, 2);
         feeder_motor.setPower(0);
-        ResetEncoder();
-        //Drive back into lane
-        EncoderDrive(DriveDirection.STRAFE_RIGHT, 1900);
-        feeder_motor.setPower(1);
-        rotate(-3, 1);
 
-        //Drive back to foundation side
-        ResetEncoder();
-        if(SkystonePosition == 1) {
-            encoderDrive(DRIVE, 56, 8);
-        } else if(SkystonePosition == 2) {
-            encoderDrive(DRIVE, 72, 8);
-        } else {
-            encoderDrive(DRIVE, 72, 8);
-        }
 
-        feeder_motor.setPower(-1);
-        sleep(500);
-
-        encoderDrive(1, -12, 2);
         telemetry.update();
     }
 }

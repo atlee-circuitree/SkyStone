@@ -40,8 +40,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //Last Edited on Feb 20, 2020 11:22 AM - Larson
 //Edited on Feb 20, 2020 7:40 PM - Berg - reducing the number of small differences between positions 1, 2 and 3
 
-@Autonomous(name = "TWO_STONES_BLUE", group = "Concept")
-public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVisionOpMode {
+@Autonomous(name = "TWO_STONES_RED", group = "Concept")
+public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORMRED extends BaseVisionOpMode {
 
     boolean problemChild = false;
 
@@ -63,7 +63,8 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVision
         feeder_motor.setPower(1);
 
         //Drive into block
-        if(SkystonePosition == 1) {
+        if(SkystonePosition == 1)
+        {
             telemetry.addData("Skystone", "FarRight");
             telemetry.update();
             ResetEncoder();
@@ -72,13 +73,16 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVision
             EncoderDrive(DriveDirection.STRAFE_LEFT, 950);
             ResetEncoder();
             encoderDrive(1, -32, 3.5);
-
-        } else if(SkystonePosition == 2) {
+        }
+        else if(SkystonePosition == 2)
+        {
             telemetry.addData("Skystone", "Center");
             telemetry.update();
             ResetEncoder();
             encoderDrive(1, -44, 3);
-        } else {
+        }
+        else
+        {
             telemetry.addData("Skystone", "FarLeft");
             telemetry.update();
 
@@ -98,16 +102,21 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVision
 
         //Drive back into lane
         ResetEncoder();
-        encoderDrive(1, 19, 3);
+        encoderDrive(1, 16, 3);
 
         //Move back to common position
-        if(SkystonePosition == 1) {
+        if(SkystonePosition == 1)
+        {
             ResetEncoder();
             EncoderDrive(DriveDirection.STRAFE_RIGHT, 950); //get back to starting position
 
-        } else if(SkystonePosition == 2) {
+        }
+        else if(SkystonePosition == 2)
+        {
             //no change needed
-        } else {
+        }
+        else
+        {
             ResetEncoder();
             EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //get back to starting position
         }
@@ -136,22 +145,24 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVision
         ResetEncoder();
         encoderDrive(DRIVE, -48, 8);
         feeder_motor.setPower(-1);
-        sleep(500);
+        sleep(300);
         feeder_motor.setPower(1);
-        rotate(-90, 1); //to 90 from 175
+        rotate(175, 1);
 
         //Drive back to 2nd skystone - 8 inches between each stone
         ResetEncoder();
-        if(SkystonePosition == 1) {
-            encoderDrive(DRIVE, 56, 5); //made positive
-        } else if(SkystonePosition == 2) {
-            encoderDrive(DRIVE, 72, 8); //made positive
-        } else {
-            encoderDrive(DRIVE, 72, 8); //made positive
+        if(SkystonePosition == 1)
+        {
+            encoderDrive(DRIVE, -56, 5);
         }
-
-
-
+        else if(SkystonePosition == 2)
+        {
+            encoderDrive(DRIVE, -72, 8);
+        }
+        else
+        {
+            encoderDrive(DRIVE, -72, 8);
+        }
         ResetEncoder();
         EncoderDrive(DriveDirection.STRAFE_LEFT, 1900);
         feeder_motor.setPower(1);
@@ -163,18 +174,22 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORM extends BaseVision
         //Drive back into lane
         EncoderDrive(DriveDirection.STRAFE_RIGHT, 1900);
         feeder_motor.setPower(1);
-        rotate(-3, 1);
+        rotate(3, 1);
 
         //Drive back to foundation side
         ResetEncoder();
-        if(SkystonePosition == 1) {
+        if(SkystonePosition == 1)
+        {
             encoderDrive(DRIVE, 56, 8);
-        } else if(SkystonePosition == 2) {
-            encoderDrive(DRIVE, 72, 8);
-        } else {
+        }
+        else if(SkystonePosition == 2)
+        {
             encoderDrive(DRIVE, 72, 8);
         }
-
+        else
+        {
+            encoderDrive(DRIVE, 72, 8);
+        }
         feeder_motor.setPower(-1);
         sleep(500);
 

@@ -41,7 +41,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * forwards/backwards and turning left and right, and the right stick controls strafing. (working on diff. control setup currently)
  */
 
-@Autonomous(name = "Foundation_Blue_BridgeSidePark_V2", group = "Linear Opmode")
+@Autonomous(name = "FOUNDATION_BLUE_WITH_REPEAT_GRAB", group = "Linear Opmode")
 public class Skystone_Foundation_Blue_Bridge_Side_V2 extends BaseAutoOpMode {
 
 
@@ -82,7 +82,7 @@ public class Skystone_Foundation_Blue_Bridge_Side_V2 extends BaseAutoOpMode {
         //Grab Foundation
         Clamp_Left.setPosition(0.9f);
         Clamp_Right.setPosition(0f);
-        sleep(750);
+        sleep(200);  //long 750 to 200
 
         //First Turn with Foundation
         resetAngle();
@@ -101,8 +101,8 @@ public class Skystone_Foundation_Blue_Bridge_Side_V2 extends BaseAutoOpMode {
         encoderDrive(DRIVE, 13.5, 2);
         Clamp_Left.setPosition(.2);
         Clamp_Right.setPosition(.8);
-        Block_Pickup.setPosition(.4f);   //release Block
-        sleep(750);
+        Block_Pickup.setPosition(.4f);   //release Block  //what block?
+        sleep(200); //long 750 to 200
 
 
 
@@ -117,7 +117,7 @@ public class Skystone_Foundation_Blue_Bridge_Side_V2 extends BaseAutoOpMode {
         int SkyNumber = 4;
         if (SkyNumber == 0) {
 
-            encoderDrive(DRIVE, -6, 2);
+            encoderDrive(DRIVE, -56, 2);
 
         } else {
             for (int BlockCounter = 1; BlockCounter <= SkyNumber; BlockCounter++) {
@@ -150,9 +150,11 @@ public class Skystone_Foundation_Blue_Bridge_Side_V2 extends BaseAutoOpMode {
                 feeder_motor.setPower(0);
 
                 Lift(LiftDirection.UP);
-                sleep(10);
+                sleep(100); //changed from 10ms to 100ms 8:32
                 Lift(LiftDirection.STOP);
+
                 encoderDrive(DRIVE, 20, 3);
+
                 Lift(LiftDirection.UP);
                 sleep(425);
                 Lift(LiftDirection.STOP);
@@ -172,9 +174,9 @@ public class Skystone_Foundation_Blue_Bridge_Side_V2 extends BaseAutoOpMode {
                 Block_Pickup.setPosition(.4f);   //release Block
                 sleep(300);
 
-                Lift(LiftDirection.DOWN);
-                sleep(100);
-                Lift(LiftDirection.STOP);
+                //Lift(LiftDirection.DOWN);
+                //sleep(100);
+                //Lift(LiftDirection.STOP);
 
 
 
