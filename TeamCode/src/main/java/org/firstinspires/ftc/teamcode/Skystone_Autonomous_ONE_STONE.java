@@ -41,7 +41,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //Edited on Feb 20, 2020 7:40 PM - Berg - reducing the number of small differences between positions 1, 2 and 3
 ///Edited on Feb 20, 2020 1:46 PM - Larson - Angled robot by 5 degrees after each strafes. The robot Strafes 5 degrees of constantly.
 
-@Autonomous(name = "ONE_STONE", group = "Concept")
+@Autonomous(name = "ONE_STONE_RED", group = "Concept")
 public class Skystone_Autonomous_ONE_STONE extends BaseVisionOpMode {
 
     boolean problemChild = false;
@@ -151,7 +151,7 @@ public class Skystone_Autonomous_ONE_STONE extends BaseVisionOpMode {
 
         //Drive to foundation side
         ResetEncoder();
-        encoderDrive(DRIVE, 40, 6);
+        encoderDrive(DRIVE, -40, 6);
         feeder_motor.setPower(-1);
         sleep(500);
         encoderDrive(1,-10, 2);

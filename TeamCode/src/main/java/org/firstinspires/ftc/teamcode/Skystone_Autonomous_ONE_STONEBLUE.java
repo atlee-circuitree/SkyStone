@@ -70,7 +70,7 @@ public class Skystone_Autonomous_ONE_STONEBLUE extends BaseVisionOpMode {
             ResetEncoder();
             encoderDrive(1, -12, 3);
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_RIGHT, 950); //change to right
+            EncoderDrive(DriveDirection.STRAFE_LEFT, 950); //change to right
             ResetEncoder();
             encoderDrive(1, -32, 3.5);
 
@@ -89,7 +89,7 @@ public class Skystone_Autonomous_ONE_STONEBLUE extends BaseVisionOpMode {
             encoderDrive(1, -12, 3);
             ResetEncoder();
             //increased to 1000 (from 950)
-            EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //changed to LEFT
+            EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //changed to LEFT
             ResetEncoder();
             encoderDrive(1, -32, 3.5);
         }
@@ -105,20 +105,20 @@ public class Skystone_Autonomous_ONE_STONEBLUE extends BaseVisionOpMode {
         //Move back to common position
         if(SkystonePosition == 1) {
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_LEFT, 950); //Changed to Left
+            EncoderDrive(DriveDirection.STRAFE_RIGHT, 950); //Changed to Left
 
         } else if(SkystonePosition == 2) {
             //No action needed
 
         } else {
             ResetEncoder();
-            EncoderDrive(DriveDirection.STRAFE_RIGHT, 1000); //Changed to RIGHT
+            EncoderDrive(DriveDirection.STRAFE_LEFT, 1000); //Changed to RIGHT
         }
 
         ResetEncoder();
 
         resetAngle();
-        rotate(-90, 0.7); //inverted
+        rotate(90, 0.7); //inverted
 
         //Position Crane and Lift before going under bridge
         //added a drive back function since the block was not fully in control
@@ -144,7 +144,7 @@ public class Skystone_Autonomous_ONE_STONEBLUE extends BaseVisionOpMode {
 
         //Drive to foundation side
         ResetEncoder();
-        encoderDrive(DRIVE, 40, 6);
+        encoderDrive(DRIVE, -40, 6);
         feeder_motor.setPower(-1);
         sleep(500);
         encoderDrive(1,-10, 2);

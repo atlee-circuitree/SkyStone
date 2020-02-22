@@ -123,7 +123,7 @@ public class Skystone_Autonomous_VisionTargetOPENCVNOPLATFORMRED extends BaseVis
 
         ResetEncoder();
         //Turn towards Foundation side
-        rotate(90, 0.7);
+        rotate(-90, 0.7);
 
         //Position Crane and Lift before going under bridge
         top_motor.setPower(1);
